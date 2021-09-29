@@ -18,12 +18,17 @@ package com.hmscl.huawei.admob_mediation.RewardedAds
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
+import com.google.ads.consent.ConsentInformation
+import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAd
 import com.google.android.gms.ads.mediation.MediationRewardedAdCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAdConfiguration
 import com.huawei.hms.ads.AdParam
+import com.huawei.hms.ads.HwAds
+import com.huawei.hms.ads.NonPersonalizedAd
 import com.huawei.hms.ads.reward.Reward
 import com.huawei.hms.ads.reward.RewardAd
 import com.huawei.hms.ads.reward.RewardAdLoadListener
@@ -70,6 +75,41 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                 })
             }
         }
-        rewardAd.loadAd(AdParam.Builder().build(), listener)
+
+        val adParam = AdParam.Builder()
+
+        /**
+         * NPA-PA
+         */
+        try {
+            val consentStatus: ConsentStatus =
+                ConsentInformation.getInstance(context).consentStatus
+            if (consentStatus == ConsentStatus.NON_PERSONALIZED)
+                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
+            else if (consentStatus == ConsentStatus.PERSONALIZED)
+                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
+        } catch (exception: java.lang.Exception) {
+            Log.i(this.toString(), "configureAdRequest: Consent status couldn't read")
+        }
+
+        /**
+         * TCF2.0
+         */
+        try {
+            val sharedPref = context?.getSharedPreferences(
+                "SharedPreferences",
+                Context.MODE_PRIVATE
+            )
+            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
+
+            if (tcfString != null && tcfString != "") {
+                val requestOptions = HwAds.getRequestOptions()
+                requestOptions.toBuilder().setConsent(tcfString).build()
+            }
+        } catch (exception: java.lang.Exception) {
+            Log.i(this.toString(), "configureAdRequest: TCFString couldn't read")
+        }
+
+        rewardAd.loadAd(adParam.build(), listener)
     }
 }
