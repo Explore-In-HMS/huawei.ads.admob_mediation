@@ -40,8 +40,6 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
 
 # Integrate the Huawei Mediation SDK
 
-**Note** : A device with Huawei Mobile Services (HMS) installed is required
-
 In the **project-level** build.gradle, include Huawei's Maven repository.
 
 ```groovy
