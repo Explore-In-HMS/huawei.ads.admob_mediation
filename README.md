@@ -80,14 +80,6 @@ dependencies {
 }
 ```
 
-1. Generate a keystore file
-
-2. Place the keystore file in the app directory
-
-3. Modify the app module build.gradle file - update the signingConfigs to your keystore's setting
-
-4. Build the project or run the app in your device / emulator
-
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
 # Version Change History
