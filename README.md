@@ -1,5 +1,9 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
+ ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.0-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+<br>
+![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
+ 
 # Introduction
 
 In this documentation we explained how to use Huawei-Admob mediation with in the different platforms.
@@ -9,6 +13,7 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
 |   | Banner Ad | Interstitial Ad | Rewarded Ad | Native Ad |
 | --- | --- | --- | --- | --- |
 | Native (Java/Kotlin) | ✅ | ✅ | ✅ | ✅ |
+| Unity |✅|✅| ✅ | ❌ |
 | React Native | ✅ | ✅ | ✅ | ✅ |
 | Flutter |✅|✅| ✅ | ❌ |
 | Cordova |✅|✅| ❌ | ❌ |
@@ -17,11 +22,13 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
   
 ## Create an ad unit on Huawei Publisher Service
 
-1. Sign in to [Huawei Developer Console] (https://developer.huawei.com/consumer/en/console) and create an AdUnit
+1. Sign in to [Huawei Developer Console](https://developer.huawei.com/consumer/en/console) and create an AdUnit
 
 ## Create a custom event on Google AdMob
 
-1. Sign in to [Google AdMob console] ([https://apps.admob.com/v2](https://apps.admob.com/v2))
+Make sure to check the article on **[How to use Huawei Ads with AdMob mediation ?](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-admob-mediation-377bdc1ba01c)**
+
+1. Sign in to [Google AdMob console](https://apps.admob.com/v2)
 2. Go to "**Mediation -> Create a new Mediation Group**" (or, use one of the existing Mediation groups)
 3. Under the "**Ad Sources**" section, click "**Add Custom Event**" Give it a label (eg: Huawei Banner Custom Event) and an eCPM, click "**Continue**"
 4. Enter the class name "**com.hmscl.huawei.admob\_mediation.all\_ads**" as the Class Name, and your Huawei's AdUnit ID from step 1 as the parameter
@@ -30,7 +37,9 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
 
 ## Create a custom event on Google Ad Manager
 
-1. Sign in to [Google AdManager console] ([https://admanager.google.com/home/](https://admanager.google.com/home/))
+Make sure to check the article on **[How to Use Huawei Ads with Google Ad Manager ?](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-google-ad-manager-e8d38746d4cc)**
+
+1. Sign in to [Google Ad Manager console](https://admanager.google.com/home/)
 2. Add Huawei as a Ad Network Company by selecting Other company in Ad Network section
 3. Go to "**Delivery  -> Yield groups**" (or, use one of the existing groups)
 4. 	Create a yield group and add Huawei as a yield partner
@@ -38,7 +47,9 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
 6. Add the adapter and its dependencies into your project
 7. Configuration of custom event is done.
 
-# Integrate the Huawei Mediation SDK
+<h1 id="integrate-huawei-sdk">
+Integrate the Huawei Mediation SDK
+</h1>
 
 In the **project-level** build.gradle, include Huawei's Maven repository.
 
@@ -61,14 +72,14 @@ allprojects {
     }
 }
 ```
-
+<h1 id="app-level">
+</h1>
 In the app-level build.gradle, include Huawei Ads dependency (required by the adapter) and the adapter
 
 ```groovy
 dependencies {
     implementation 'com.huawei.hms:ads:3.4.47.302'
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>
-'
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
 > **_NOTE:_**  If your app can run only on Huawei mobile phones, you can integrate the Huawei Ads Lite SDK instead of Huawei Ads SDK (Optional)
@@ -109,6 +120,8 @@ Transparency & Consent Framework v2.0 and personalized & non-personalized ads co
 
 This section demonstrates how to use AdMob mediation feature with Huawei Ads Kit on Native android app.
 
+Make sure to check the article on [How to use Huawei Ads with AdMob mediation (Native Android)](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-admob-mediation-native-android-8fc41438dfad)
+
 Firstly, integrate the Admob SDK for Android
 
 [Admob Android SDK](https://developers.google.com/admob/android/quick-start) can be used for all ad types.
@@ -131,10 +144,61 @@ To use _Rewarded_ ads in Native android _Rewarded_, please check the Admob SDK. 
 
 To use _Native_ ads in Native android apps, please check the Admob SDK. Click [here](https://developers.google.com/admob/android/native/start) to get more information about Admob SDKs _Native_ Ad development.
 
+## **Unity**
+
+This section demonstrates how to use Admob mediation feature with Huawei Ads Kit on Unity.
+
+**Supported Ad Formats are:** Banner Ads, Interstitial Ads and Rewarded Ads.
+
+Firstly, integrate the Admob Unity SDK to Unity.
+
+For more details on Admob Unity SDK visit [here](https://developers.google.com/admob/unity/quick-start)
+
+### **Banner Ads**
+To use Banner ads in Unity , please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/banner) to get more information about Admob Unity SDKs Banner Ad development. 
+
+### **Interstitial Ads**
+To use Interstitial ads in Unity, please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/interstitial) to get more information about Admob Unity SDKs Interstitial Ad development.
+
+### **Rewarded Ads**
+To use Rewarded ads in Unity, please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/rewarded) to get more information about Admob Unity SDKs Banner Ad development.
+
+#### **Step 1:** 
+Make sure to switch to the Android Platform from **Build Settings -> Android -> Switch Platform**
+#### **Step 2:**
+**Edit -> Project Settings ->  Player -> Other Settings**<br>
+In Other Settings set minimum API level to at least **21**.
+#### **Step 3:**
+**Edit -> Project Settings ->  Player -> Publishing Settings**<br>
+In Publishing Settings select **“Custom Main Gradle Template”** , **“Custom Base Gradle Template”** and **“Custom Greadle Properties Template”** <br>
+This will let you override **mainTemplate.gradle** , **baseProjectTemplate.gradle** and **gradleTemplate.properties** files in the project.
+#### **Step 4:**
+**baseProjectTemplate.gradle** is equal to **project-level gradle** so you have to include **Huawei's Maven repositories** from the Integrate the Huawei Mediation SDK section from [**here**](#integrate-huawei-sdk) <br>
+**mainTemplate.gradle** is equal to **app-level build.gradle** so you have to include **dependencies** from the Integrate the Huawei Mediation SDK section from [**here**](#app-level).
+#### **Step 5:**
+Open **gradleTemplate.properties** and add the following lines
+```groovy
+android.useAndroidX=true
+android.enableJetifier=true
+```
+
+**After these configurations is completed you can display Huawei Ads.**
+
+**Note:** 
+In case of any error on aaptOptions you can add the following line to aaptOptions in **launcherTemplate.gradle** which you override it by enabiling it from **Edit -> Project Settings ->  Player -> Publishing Settings**
+
+```groovy
+aaptOptions {
+        noCompress = ['.ress', '.resource', '.obb'] + unityStreamingAssets.tokenize(', ')
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+```
+
 ## React Native
 
-
 This section demonstrates how to use AdMob mediation feature with Huawei Ads Kit on React-Native.
+
+Make sure to check the article on [How to use Huawei Ads with AdMob mediation (React Native)](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-admob-mediation-react-native-e02a78ebb1eb)
 
 **Important:** _There is no official React Native SDK for Admob therefore third party SDKs has been used in the demonstration._
 
@@ -185,6 +249,8 @@ onAdFailedToLoad={error => console.error(error)} />
 ## Flutter
 
 This section demonstrates how to use AdMob mediation feature with Huawei Ads Kit on Flutter.
+
+Make sure to check the article on [How to use Huawei Ads with AdMob mediation (Flutter)](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-admob-mediation-flutter-8a3fc3bb1793)
 
 **Important:** _There is no official Flutter SDK for_ AdMob _therefore third party SDKs has been used in the demonstration._
 
@@ -257,6 +323,8 @@ class RewardedAd extends AdWithoutView {
 ## Cordova
 
 This section demonstrates how to use AdMob mediation feature with Huawei Ads Kit on Cordova.
+
+Make sure to check the article on [How to use Huawei Ads with AdMob mediation (Cordova)](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-admob-mediation-cordova-f48986f40ab1)
 
 **Important:** _There is no official Cordova SDK for_ AdMob _therefore third party SDKs has been used in the demonstration._
 
