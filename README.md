@@ -148,6 +148,8 @@ To use _Native_ ads in Native android apps, please check the Admob SDK. Click [h
 
 This section demonstrates how to use Admob mediation feature with Huawei Ads Kit on Unity.
 
+Make sure to check the article on [How to use Huawei Ads with Supported Ad Platforms in Unity ?](https://medium.com/huawei-developers/how-to-use-huawei-ads-with-supported-ad-platforms-in-unity-2be08c943a7f)
+
 **Supported Ad Formats are:** Banner Ads, Interstitial Ads and Rewarded Ads.
 
 Firstly, integrate the Admob Unity SDK to Unity.
