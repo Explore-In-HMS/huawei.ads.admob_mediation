@@ -108,6 +108,30 @@ The HUAWEI Ads SDK (com.huawei.hms:ads) has integrated the required permissions.
 
 **android.permission.WRITE_CALENDAR:** Creates a calendar event when a user clicks the subscription button in an ad. (The permission can be removed if not necessary.) <br />
 
+## **Configuring Obfuscation Scripts**
+Before building the APK, configure the obfuscation configuration file to prevent the HUAWEI Ads SDK () from being obfuscated.
+
+Open the obfuscation configuration file proguard-rules.pro in the app-level directory of your Android project, and add configurations to exclude the HUAWEI Ads SDK from obfuscation.
+
+```groovy
+-keep class com.huawei.openalliance.ad.** { *; }
+-keep class com.huawei.hms.ads.** { *; }
+```
+
+## **Configuring Network Permissions**
+To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or later, configure the following information in the AndroidManifest.xml file:
+
+```groovy
+<application
+    ...
+    android:usesCleartextTraffic="true"
+    >
+    ...
+</application>
+```
+
+
+
 # Version Change History
 
 ## 1.2.0
