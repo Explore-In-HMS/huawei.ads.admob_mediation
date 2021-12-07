@@ -134,6 +134,10 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 # Version Change History
 
+## 1.2.1
+
+Min SDK updated.
+
 ## 1.2.0
 
 Transparency & Consent Framework v2.0 and personalized & non-personalized ads configurations are integrated.
