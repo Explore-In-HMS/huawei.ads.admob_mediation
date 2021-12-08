@@ -78,7 +78,7 @@ In the app-level build.gradle, include Huawei Ads dependency (required by the ad
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.47.302'
+    implementation 'com.huawei.hms:ads:3.4.49.301'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -86,10 +86,15 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.47.302'
+    implementation 'com.huawei.hms:ads-lite:13.4.49.301'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
+[Check the latest Huawei Ads SDK here](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909)
+
+[Check the latest version of adapter here](#version-change-history)
+
+
 
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
