@@ -61,7 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.gms:play-services-ads:19.5.0'
     //   implementation 'com.huawei.hms:ads:3.4.41.304'
-    implementation 'com.huawei.hms:ads-lite:13.4.47.302'
+    implementation 'com.huawei.hms:ads-lite:13.4.49.305'
     implementation 'com.google.android.ads.consent:consent-library:1.0.8'
 
 }
