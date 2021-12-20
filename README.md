@@ -78,7 +78,7 @@ In the app-level build.gradle, include Huawei Ads dependency (required by the ad
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.49.301'
+    implementation 'com.huawei.hms:ads:3.4.49.305'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -86,7 +86,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.49.301'
+    implementation 'com.huawei.hms:ads-lite:13.4.49.305'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -138,6 +138,10 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 
 # Version Change History
+
+## 1.2.2
+
+Ads version updated and Zip Path Traversal issue is fixed.
 
 ## 1.2.1
 
