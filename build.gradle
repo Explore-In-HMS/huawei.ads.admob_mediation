@@ -32,7 +32,7 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-plugins {
+/*plugins {
     id "org.sonarqube" version "3.0"
 }
 sonarqube {
@@ -44,13 +44,13 @@ sonarqube {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.projectVersion", version()
     }
-}
+}*/
 
 allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
+        maven {url  'https://jitpack.io' }
 
         maven { url 'https://developer.huawei.com/repo/' }
 

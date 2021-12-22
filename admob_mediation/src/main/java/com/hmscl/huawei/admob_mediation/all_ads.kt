@@ -73,6 +73,7 @@ class all_ads : Adapter(),
             huaweiBannerView.adId = huaweiBannerAdId
             huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
+            huaweiBannerView.adListener.onAdLoaded()
         } catch (e: Exception) {
             Log.e(TAG, "Request Banner Ad Failed - ${e.message}")
             huaweiBannerView.adListener.onAdFailed(AdParam.ErrorCode.INNER)
@@ -95,6 +96,7 @@ class all_ads : Adapter(),
             }
             huaweiInterstitialView.adId = huaweiInterstitialAdId
             huaweiInterstitialView.loadAd(configureAdRequest(mediationAdRequest))
+            huaweiInterstitialView.adListener.onAdLoaded()
         } catch (e: Exception) {
             Log.e(TAG, "Request Interstitial Ad Failed - ${e.message}")
             huaweiInterstitialView.adListener.onAdFailed(AdParam.ErrorCode.INNER)
