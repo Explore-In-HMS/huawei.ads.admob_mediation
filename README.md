@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.0-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.2-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
  
@@ -78,7 +78,7 @@ In the app-level build.gradle, include Huawei Ads dependency (required by the ad
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.47.302'
+    implementation 'com.huawei.hms:ads:3.4.49.305'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -86,10 +86,15 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.47.302'
+    implementation 'com.huawei.hms:ads-lite:13.4.49.305'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
+[Check the latest Huawei Ads SDK here](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909)
+
+[Check the latest version of adapter here](#version-change-history)
+
+
 
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
@@ -133,6 +138,14 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 
 # Version Change History
+
+## 1.2.2
+
+Ads version updated and Zip Path Traversal issue is fixed.
+
+## 1.2.1
+
+Min SDK updated.
 
 ## 1.2.0
 
