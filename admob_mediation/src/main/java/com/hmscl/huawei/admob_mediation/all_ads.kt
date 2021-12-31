@@ -129,7 +129,6 @@ class all_ads : Adapter(),
 //            val request = HuaweiCustomEventNativeAdsRequest()
             val options = mediationAdRequest.nativeAdOptions
 
-
             if (!mediationAdRequest.isUnifiedNativeAdRequested) {
                 listener?.onAdFailedToLoad(AdRequest.ERROR_CODE_INVALID_REQUEST)
                 return
@@ -139,22 +138,41 @@ class all_ads : Adapter(),
                     mediationAdRequest.isUnifiedNativeAdRequested
                 }"
             )
+            val videoConfiguration: VideoConfiguration
+            val adConfiguration: NativeAdConfiguration
+            Log.d(TAG, "Line 143")
+            if (options != null && options.videoOptions != null) {
+                Log.d(TAG, "Line 145")
 
+                videoConfiguration = VideoConfiguration.Builder()
+                    .setStartMuted(options.videoOptions!!.startMuted)
+                    .setClickToFullScreenRequested(options.videoOptions!!.clickToExpandRequested)
+                    .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
+                    .build()
+                Log.d(TAG, "Line 152")
 
-            val videoConfiguration = VideoConfiguration.Builder()
-                .setStartMuted(true)
-                .setStartMuted(options.videoOptions!!.startMuted)
-                .setClickToFullScreenRequested(options.videoOptions!!.clickToExpandRequested)
-                .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
-                .build()
+                adConfiguration = NativeAdConfiguration.Builder()
+                    .setVideoConfiguration(videoConfiguration)
+                    .setMediaAspect(options.mediaAspectRatio)
+                    .setChoicesPosition(NativeAdConfiguration.ChoicesPosition.INVISIBLE)
+                    .build()
+                Log.d(TAG, "Line 159")
 
+            } else {
 
-            val adConfiguration = NativeAdConfiguration.Builder()
-                .setVideoConfiguration(videoConfiguration)
-                .setMediaAspect(options.mediaAspectRatio)
-                .setChoicesPosition(options.adChoicesPlacement)
-                .build()
-            Log.d("TAG","adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted.toString() )
+                videoConfiguration = VideoConfiguration.Builder()
+                    .setStartMuted(true)
+                    .build()
+                adConfiguration = NativeAdConfiguration.Builder()
+                    .setVideoConfiguration(videoConfiguration)
+                    .setChoicesPosition(NativeAdConfiguration.ChoicesPosition.INVISIBLE)
+                    .build()
+            }
+
+            Log.d(
+                "TAG",
+                "adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted.toString()
+            )
 
             if (serverParameter != null) {
                 huaweiNativeAdId = serverParameter
