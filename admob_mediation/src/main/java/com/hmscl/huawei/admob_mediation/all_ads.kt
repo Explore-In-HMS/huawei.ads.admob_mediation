@@ -135,8 +135,7 @@ class all_ads : Adapter(),
             }
             Log.d(
                 TAG, "MediationAdRequest = ${
-                    mediationAdRequest.isUnifiedNativeAdRequested.toString() + mediationAdRequest.isAppInstallAdRequested.toString()
-                            + mediationAdRequest.isAdMuted.toString() + mediationAdRequest.isContentAdRequested.toString()
+                    mediationAdRequest.isUnifiedNativeAdRequested
                 }"
             )
 
