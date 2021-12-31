@@ -154,7 +154,7 @@ class all_ads : Adapter(),
                 .setMediaAspect(options.mediaAspectRatio)
                 .setChoicesPosition(options.adChoicesPlacement)
                 .build()
-            Log.d("TAG","adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted )
+            Log.d("TAG","adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted.toString() )
 
             if (serverParameter != null) {
                 huaweiNativeAdId = serverParameter

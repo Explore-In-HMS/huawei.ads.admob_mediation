@@ -33,7 +33,9 @@ class HuaweiCustomEventBannerEventForwarder(
 
     override fun onAdFailed(errorCode: Int) {
         Log.e("TAG", "HuaweiCustomEventBannerEventForwarder = ${errorCode.toString()}")
-        listener.onAdFailedToLoad(AdError(AdParam.ErrorCode.INNER, AdParam.ErrorCode.INNER.toString(),"HuaweiBannerAds"))
+      //  listener.onAdFailedToLoad(AdError(AdParam.ErrorCode.INNER, AdParam.ErrorCode.INNER.toString(),"HuaweiBannerAds"))
+        listener.onAdFailedToLoad(errorCode)
+
     }
 
     override fun onAdClosed() {

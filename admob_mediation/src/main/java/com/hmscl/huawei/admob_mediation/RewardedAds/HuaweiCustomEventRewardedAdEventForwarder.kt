@@ -64,7 +64,9 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                     }
 
                     override fun onRewardAdFailedToShow(errorCode: Int) {
-                        rewardedAdCallback.onAdFailedToShow(AdError(errorCode,"Rewarded Ads","Failed to show"))
+                      //  rewardedAdCallback.onAdFailedToShow(AdError(errorCode,"Rewarded Ads","Failed to show"))
+                        rewardedAdCallback.onAdFailedToShow("Rewarded Ads Failed to show = ${errorCode.toString()}")
+
                         Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${errorCode.toString() + "Failed to show"}")
 
                     }
