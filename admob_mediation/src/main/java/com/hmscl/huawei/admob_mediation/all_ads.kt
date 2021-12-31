@@ -75,7 +75,6 @@ class all_ads : Adapter(),
             huaweiBannerView.adId = huaweiBannerAdId
             huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
-            huaweiBannerView.adListener.onAdLoaded()
         } catch (e: Exception) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
@@ -103,7 +102,6 @@ class all_ads : Adapter(),
             }
             huaweiInterstitialView.adId = huaweiInterstitialAdId
             huaweiInterstitialView.loadAd(configureAdRequest(mediationAdRequest))
-            huaweiInterstitialView.adListener.onAdLoaded()
         } catch (e: Exception) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
