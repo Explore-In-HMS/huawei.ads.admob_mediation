@@ -16,18 +16,22 @@
 
 package com.hmscl.huawei.admob_mediation.NativeAds
 
+import android.util.Log
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.mediation.customevent.CustomEventNativeListener
 
 class HuaweiCustomEventNativeAdsEventForwarder (
     private val listener: CustomEventNativeListener,
     private val options: NativeAdOptions
-    ) : HuaweiCustomEventNativeAdsListener() {
+) : HuaweiCustomEventNativeAdsListener() {
     override fun onAdClosed() {
+        listener.onAdClosed()
         super.onAdClosed()
     }
 
     override fun onAdFailed(p0: Int) {
+        listener.onAdFailedToLoad(p0)
+        Log.d("TAG","HuaweiCustomEventNativeAdsEventForwarder = ${p0.toString()}")
         super.onAdFailed(p0)
     }
 
@@ -36,6 +40,7 @@ class HuaweiCustomEventNativeAdsEventForwarder (
     }
 
     override fun onAdOpened() {
+        listener.onAdOpened()
         super.onAdOpened()
     }
 

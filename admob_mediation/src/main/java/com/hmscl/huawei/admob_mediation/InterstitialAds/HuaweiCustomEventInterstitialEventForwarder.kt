@@ -34,7 +34,8 @@ class HuaweiCustomEventInterstitialEventForwarder(
     }
 
     override fun onAdFailed(errorCode: Int) {
-        Log.e("error--",errorCode.toString())
+        Log.e("TAG", "HuaweiCustomEventInterstitialEventForwarder = ${errorCode.toString()}")
+
         listener.onAdFailedToLoad(AdError(AdParam.ErrorCode.INNER, AdParam.ErrorCode.INNER.toString(),"HuaweiInterstitialAds"))
     }
 

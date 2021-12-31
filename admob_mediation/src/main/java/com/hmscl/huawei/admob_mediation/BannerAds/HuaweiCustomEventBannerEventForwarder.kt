@@ -24,15 +24,15 @@ import com.huawei.hms.ads.AdParam
 import com.huawei.hms.ads.banner.BannerView
 
 class HuaweiCustomEventBannerEventForwarder(
-        private var listener: CustomEventBannerListener,
-        private var huaweiBannerView: BannerView
+    private var listener: CustomEventBannerListener,
+    private var huaweiBannerView: BannerView
 ) : AdListener() {
     override fun onAdLoaded() {
         listener.onAdLoaded(huaweiBannerView)
     }
 
     override fun onAdFailed(errorCode: Int) {
-        Log.e("error--",errorCode.toString())
+        Log.e("TAG", "HuaweiCustomEventBannerEventForwarder = ${errorCode.toString()}")
         listener.onAdFailedToLoad(AdError(AdParam.ErrorCode.INNER, AdParam.ErrorCode.INNER.toString(),"HuaweiBannerAds"))
     }
 

@@ -53,6 +53,8 @@ class HuaweiCustomEventRewardedAdEventForwarder(
         val listener = object : RewardAdLoadListener() {
             override fun onRewardAdFailedToLoad(p0: Int) {
                 super.onRewardAdFailedToLoad(p0)
+                Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${p0.toString()}")
+
             }
 
             override fun onRewardedLoaded() {
@@ -63,6 +65,8 @@ class HuaweiCustomEventRewardedAdEventForwarder(
 
                     override fun onRewardAdFailedToShow(errorCode: Int) {
                         rewardedAdCallback.onAdFailedToShow(AdError(errorCode,"Rewarded Ads","Failed to show"))
+                        Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${errorCode.toString() + "Failed to show"}")
+
                     }
 
                     override fun onRewardAdOpened() {

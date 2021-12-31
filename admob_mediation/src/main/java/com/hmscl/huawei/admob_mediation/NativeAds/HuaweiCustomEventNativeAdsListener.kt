@@ -16,6 +16,7 @@
 
 package com.hmscl.huawei.admob_mediation.NativeAds
 
+import android.util.Log
 import com.huawei.hms.ads.AdListener
 
 open class HuaweiCustomEventNativeAdsListener: AdListener() {
@@ -24,6 +25,7 @@ open class HuaweiCustomEventNativeAdsListener: AdListener() {
     }
 
     override fun onAdFailed(p0: Int) {
+        Log.d("TAG","HuaweiCustomEventNativeAdsListener = ${p0.toString()}")
         super.onAdFailed(p0)
     }
 

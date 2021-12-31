@@ -35,10 +35,12 @@ import com.huawei.hms.ads.*
 import com.huawei.hms.ads.banner.BannerView
 import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
+import java.io.PrintWriter
+import java.io.StringWriter
 
 
 class all_ads : Adapter(),
-        CustomEventBanner, CustomEventInterstitial, CustomEventNative {
+    CustomEventBanner, CustomEventInterstitial, CustomEventNative {
     private val TAG = all_ads::class.java.simpleName
 
     private lateinit var huaweiBannerView: BannerView
@@ -55,12 +57,12 @@ class all_ads : Adapter(),
     private var context: Context? = null
 
     override fun requestBannerAd(
-            context: Context?,
-            listener: CustomEventBannerListener,
-            serverParameters: String?,
-            size: AdSize,
-            mediationAdRequest: MediationAdRequest,
-            mediationExtras: Bundle?
+        context: Context?,
+        listener: CustomEventBannerListener,
+        serverParameters: String?,
+        size: AdSize,
+        mediationAdRequest: MediationAdRequest,
+        mediationExtras: Bundle?
     ) {
         try {
             this.context = context
@@ -75,22 +77,27 @@ class all_ads : Adapter(),
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
             huaweiBannerView.adListener.onAdLoaded()
         } catch (e: Exception) {
-            Log.e(TAG, "Request Banner Ad Failed - ${e.message}")
+            val stacktrace =
+                StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "Request Banner Ad Failed: $stacktrace")
             huaweiBannerView.adListener.onAdFailed(AdParam.ErrorCode.INNER)
         }
     }
 
     override fun requestInterstitialAd(
-            context: Context?,
-            listener: CustomEventInterstitialListener,
-            serverParameters: String?,
-            mediationAdRequest: MediationAdRequest,
-            mediationExtras: Bundle?
+        context: Context?,
+        listener: CustomEventInterstitialListener,
+        serverParameters: String?,
+        mediationAdRequest: MediationAdRequest,
+        mediationExtras: Bundle?
     ) {
         try {
             this.context = context
             huaweiInterstitialView = InterstitialAd(context)
-            huaweiInterstitialView.adListener = HuaweiCustomEventInterstitialEventForwarder(listener, huaweiInterstitialView)
+            huaweiInterstitialView.adListener = HuaweiCustomEventInterstitialEventForwarder(
+                listener,
+                huaweiInterstitialView
+            )
             if (serverParameters != null) {
                 huaweiInterstitialAdId = serverParameters
             }
@@ -98,7 +105,9 @@ class all_ads : Adapter(),
             huaweiInterstitialView.loadAd(configureAdRequest(mediationAdRequest))
             huaweiInterstitialView.adListener.onAdLoaded()
         } catch (e: Exception) {
-            Log.e(TAG, "Request Interstitial Ad Failed - ${e.message}")
+            val stacktrace =
+                StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "Request Interstitial Ad Failed: $stacktrace")
             huaweiInterstitialView.adListener.onAdFailed(AdParam.ErrorCode.INNER)
         }
 
@@ -111,11 +120,11 @@ class all_ads : Adapter(),
     }
 
     override fun requestNativeAd(
-            context: Context,
-            listener: CustomEventNativeListener?,
-            serverParameter: String?,
-            mediationAdRequest: NativeMediationAdRequest,
-            customEventExtras: Bundle?
+        context: Context,
+        listener: CustomEventNativeListener?,
+        serverParameter: String?,
+        mediationAdRequest: NativeMediationAdRequest,
+        customEventExtras: Bundle?
     ) {
         try {
             this.context = context
@@ -126,23 +135,35 @@ class all_ads : Adapter(),
                 listener?.onAdFailedToLoad(AdRequest.ERROR_CODE_INVALID_REQUEST)
                 return
             }
+            Log.d(
+                TAG, "MediationAdRequest = ${
+                    mediationAdRequest.isUnifiedNativeAdRequested.toString() + mediationAdRequest.isAppInstallAdRequested.toString()
+                            + mediationAdRequest.isAdMuted.toString() + mediationAdRequest.isContentAdRequested.toString()
+                }"
+            )
 
             val videoConfiguration = VideoConfiguration.Builder()
-                    .setStartMuted(options.videoOptions!!.startMuted)
-                    .setClickToFullScreenRequested(options.videoOptions!!.clickToExpandRequested)
-                    .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
-                    .build()
+                .setStartMuted(true)
+                .setStartMuted(options.videoOptions!!.startMuted)
+                .setClickToFullScreenRequested(options.videoOptions!!.clickToExpandRequested)
+                .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
+                .build()
 
             val adConfiguration = NativeAdConfiguration.Builder()
-                    .setVideoConfiguration(videoConfiguration)
-                    .setMediaAspect(options.mediaAspectRatio)
-                    .setChoicesPosition(options.adChoicesPlacement)
-                    .build()
+                .setVideoConfiguration(videoConfiguration)
+                .setMediaAspect(options.mediaAspectRatio)
+                .setChoicesPosition(options.adChoicesPlacement)
+                .build()
 
             if (serverParameter != null) {
                 huaweiNativeAdId = serverParameter
             }
-            val loadedEventForwarder = HuaweiCustomEventNativeAdsLoadedEventForwarder(listener!!, options, context)
+            Log.d(TAG, "serverParameter $serverParameter")
+            val loadedEventForwarder = HuaweiCustomEventNativeAdsLoadedEventForwarder(
+                listener!!,
+                options,
+                context
+            )
             val adEventForwarder = HuaweiCustomEventNativeAdsEventForwarder(listener, options)
             val builder = NativeAdLoader.Builder(context, huaweiNativeAdId)
             builder.setNativeAdOptions(adConfiguration)
@@ -155,7 +176,10 @@ class all_ads : Adapter(),
             nativeAdLoader = builder.build()
             nativeAdLoader.loadAd(configureAdRequest(mediationAdRequest))
         } catch (e: Exception) {
-            Log.e(TAG, "Request Native Ad Failed - ${e.message}")
+
+            val stacktrace =
+                StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "Request Native Ad Failed: $stacktrace")
         }
 
     }
@@ -173,7 +197,7 @@ class all_ads : Adapter(),
          */
         try {
             val consentStatus: ConsentStatus =
-                    ConsentInformation.getInstance(this.context).consentStatus
+                ConsentInformation.getInstance(this.context).consentStatus
             if (consentStatus == ConsentStatus.NON_PERSONALIZED)
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
             else if (consentStatus == ConsentStatus.PERSONALIZED)
@@ -187,8 +211,8 @@ class all_ads : Adapter(),
          */
         try {
             val sharedPref = context?.getSharedPreferences(
-                    "SharedPreferences",
-                    Context.MODE_PRIVATE
+                "SharedPreferences",
+                Context.MODE_PRIVATE
             )
             val tcfString = sharedPref?.getString("IABTCF_TCString", "");
 
@@ -224,9 +248,10 @@ class all_ads : Adapter(),
     }
 
     override fun initialize(
-            context: Context?,
-            initializationCompleteCallback: InitializationCompleteCallback,
-            mediationConfiguration: MutableList<MediationConfiguration>?) {
+        context: Context?,
+        initializationCompleteCallback: InitializationCompleteCallback,
+        mediationConfiguration: MutableList<MediationConfiguration>?
+    ) {
 
     }
 
@@ -239,10 +264,16 @@ class all_ads : Adapter(),
     }
 
     override fun loadRewardedAd(
-            mediationRewardedAdConfiguration: MediationRewardedAdConfiguration?,
-            mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?) {
-        val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD)
-        val forwarder = HuaweiCustomEventRewardedAdEventForwarder(mediationRewardedAdConfiguration!!, mediationAdLoadCallback!!)
+        mediationRewardedAdConfiguration: MediationRewardedAdConfiguration?,
+        mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?
+    ) {
+        val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
+            MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
+        )
+        val forwarder = HuaweiCustomEventRewardedAdEventForwarder(
+            mediationRewardedAdConfiguration!!,
+            mediationAdLoadCallback!!
+        )
         forwarder.load(adUnit)
     }
 }

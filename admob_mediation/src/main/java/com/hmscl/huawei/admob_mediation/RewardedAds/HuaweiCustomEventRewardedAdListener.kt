@@ -16,11 +16,14 @@
 
 package com.hmscl.huawei.admob_mediation.RewardedAds
 
+import android.util.Log
 import com.huawei.hms.ads.reward.RewardAdLoadListener
 
 open class HuaweiCustomEventRewardedAdListener: RewardAdLoadListener() {
     override fun onRewardAdFailedToLoad(errorCode: Int) {
         super.onRewardAdFailedToLoad(errorCode)
+        Log.e("TAG", "HuaweiCustomEventRewardedAdListener = ${errorCode.toString()}")
+
     }
 
     override fun onRewardedLoaded() {
