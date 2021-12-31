@@ -129,6 +129,7 @@ class all_ads : Adapter(),
 //            val request = HuaweiCustomEventNativeAdsRequest()
             val options = mediationAdRequest.nativeAdOptions
 
+
             if (!mediationAdRequest.isUnifiedNativeAdRequested) {
                 listener?.onAdFailedToLoad(AdRequest.ERROR_CODE_INVALID_REQUEST)
                 return
@@ -139,6 +140,7 @@ class all_ads : Adapter(),
                 }"
             )
 
+
             val videoConfiguration = VideoConfiguration.Builder()
                 .setStartMuted(true)
                 .setStartMuted(options.videoOptions!!.startMuted)
@@ -146,11 +148,13 @@ class all_ads : Adapter(),
                 .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
                 .build()
 
+
             val adConfiguration = NativeAdConfiguration.Builder()
                 .setVideoConfiguration(videoConfiguration)
                 .setMediaAspect(options.mediaAspectRatio)
                 .setChoicesPosition(options.adChoicesPlacement)
                 .build()
+            Log.d("TAG","adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted )
 
             if (serverParameter != null) {
                 huaweiNativeAdId = serverParameter
