@@ -139,6 +139,10 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 # Version Change History
 
+## 1.2.4
+
+AdListener methods has been added.
+
 ## 1.2.3
 
 OnLoaded() methods has been added .
