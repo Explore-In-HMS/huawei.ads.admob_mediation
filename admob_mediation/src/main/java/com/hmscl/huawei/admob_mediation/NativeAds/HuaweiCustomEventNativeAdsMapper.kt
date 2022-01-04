@@ -27,12 +27,17 @@ import com.huawei.hms.ads.nativead.NativeAd
 class HuaweiCustomEventNativeAdsMapper(
     private var huaweiNativeAd: NativeAd,
     private val context: Context
-): UnifiedNativeAdMapper() {
-    private var bundleData: Bundle? = null
+) : UnifiedNativeAdMapper() {
+
     init {
         if (huaweiNativeAd.choicesInfo.content != "" && huaweiNativeAd.choicesInfo.icons.size > 0) {
             val whyThisAd: Button = Button(context)
-            whyThisAd.setCompoundDrawables(huaweiNativeAd.choicesInfo.icons[0].drawable,null,null,null)
+            whyThisAd.setCompoundDrawables(
+                huaweiNativeAd.choicesInfo.icons[0].drawable,
+                null,
+                null,
+                null
+            )
             whyThisAd.text = huaweiNativeAd.choicesInfo.content
             whyThisAd.setOnClickListener { huaweiNativeAd.gotoWhyThisAdPage(context) }
             adChoicesContent = whyThisAd
@@ -69,10 +74,11 @@ class HuaweiCustomEventNativeAdsMapper(
     }
 
     override fun recordImpression() {
-        huaweiNativeAd.recordImpressionEvent(bundleData)
+        huaweiNativeAd.recordImpressionEvent(extras)
     }
 
     override fun handleClick(view: View?) {
-        huaweiNativeAd.triggerClick(bundleData)
+        // recordClickEvent will be called automatically when triggerClick called.
+        huaweiNativeAd.triggerClick(extras)
     }
 }

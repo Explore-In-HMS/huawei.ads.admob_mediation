@@ -126,7 +126,6 @@ class all_ads : Adapter(),
     ) {
         try {
             this.context = context
-//            val request = HuaweiCustomEventNativeAdsRequest()
             val options = mediationAdRequest.nativeAdOptions
 
             if (!mediationAdRequest.isUnifiedNativeAdRequested) {
@@ -140,24 +139,19 @@ class all_ads : Adapter(),
             )
             val videoConfiguration: VideoConfiguration
             val adConfiguration: NativeAdConfiguration
-            Log.d(TAG, "Line 143")
+
             if (options != null && options.videoOptions != null) {
-                Log.d(TAG, "Line 145")
 
                 videoConfiguration = VideoConfiguration.Builder()
                     .setStartMuted(options.videoOptions!!.startMuted)
                     .setClickToFullScreenRequested(options.videoOptions!!.clickToExpandRequested)
                     .setCustomizeOperateRequested(options.videoOptions!!.customControlsRequested)
                     .build()
-                Log.d(TAG, "Line 152")
-
                 adConfiguration = NativeAdConfiguration.Builder()
                     .setVideoConfiguration(videoConfiguration)
                     .setMediaAspect(options.mediaAspectRatio)
                     .setChoicesPosition(NativeAdConfiguration.ChoicesPosition.INVISIBLE)
                     .build()
-                Log.d(TAG, "Line 159")
-
             } else {
 
                 videoConfiguration = VideoConfiguration.Builder()
