@@ -247,17 +247,15 @@ class all_ads : Adapter(),
     }
 
     override fun onDestroy() {
-//        Not sure if these are needed
-//        huaweiBannerView.adListener = AdListener()
-//        huaweiInterstitialView.adListener = AdListener()
+        huaweiBannerView.destroy()
     }
 
     override fun onPause() {
-        TODO("Not yet implemented")
+        huaweiBannerView.pause()
     }
 
     override fun onResume() {
-        TODO("Not yet implemented")
+        huaweiBannerView.resume()
     }
 
     override fun initialize(
