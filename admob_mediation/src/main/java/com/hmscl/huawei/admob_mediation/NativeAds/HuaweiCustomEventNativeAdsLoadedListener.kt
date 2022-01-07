@@ -22,6 +22,4 @@ open class HuaweiCustomEventNativeAdsLoadedListener: NativeAd.NativeAdLoadedList
     override fun onNativeAdLoaded(native: NativeAd) {
         TODO("Not yet implemented")
     }
-
-
 }

@@ -28,6 +28,7 @@ class HuaweiCustomEventBannerEventForwarder(
     private var huaweiBannerView: BannerView
 ) : AdListener() {
     override fun onAdLoaded() {
+        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdLoaded()")
         listener.onAdLoaded(huaweiBannerView)
     }
 
@@ -39,18 +40,22 @@ class HuaweiCustomEventBannerEventForwarder(
     }
 
     override fun onAdClosed() {
+        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdClosed()")
         listener.onAdClosed()
     }
 
     override fun onAdLeave() {
+        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdLeave()")
         listener.onAdLeftApplication()
     }
 
     override fun onAdOpened() {
+        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdOpened()")
         listener.onAdOpened()
     }
 
     override fun onAdClicked() {
+        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdClicked()")
         listener.onAdClicked()
 
     }

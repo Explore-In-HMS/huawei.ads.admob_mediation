@@ -30,6 +30,7 @@ class HuaweiCustomEventInterstitialEventForwarder(
         private var huaweiInterstitialView: InterstitialAd
 ) : AdListener() {
     override fun onAdLoaded() {
+        Log.d("TAG", "HuaweiCustomEventInterstitialEventForwarder =  onAdLoaded()")
         listener.onAdLoaded()
     }
 
@@ -41,18 +42,22 @@ class HuaweiCustomEventInterstitialEventForwarder(
     }
 
     override fun onAdClosed() {
+        Log.d("TAG", "HuaweiCustomEventInterstitialEventForwarder =  onAdClosed()")
         listener.onAdClosed()
     }
 
     override fun onAdLeave() {
+        Log.d("TAG", "HuaweiCustomEventInterstitialEventForwarder =  onAdLeave()")
         listener.onAdLeftApplication()
     }
 
     override fun onAdOpened() {
+        Log.d("TAG", "HuaweiCustomEventInterstitialEventForwarder =  onAdOpened()")
         listener.onAdOpened()
     }
 
     override fun onAdClicked() {
+        Log.d("TAG", "HuaweiCustomEventInterstitialEventForwarder =  onAdClicked")
         listener.onAdClicked()
 
     }

@@ -23,10 +23,10 @@ open class HuaweiCustomEventRewardedAdListener: RewardAdLoadListener() {
     override fun onRewardAdFailedToLoad(errorCode: Int) {
         super.onRewardAdFailedToLoad(errorCode)
         Log.e("TAG", "HuaweiCustomEventRewardedAdListener = ${errorCode.toString()}")
-
     }
 
     override fun onRewardedLoaded() {
+        Log.d("TAG", "HuaweiCustomEventRewardedAdListener = onRewardedLoaded()")
         super.onRewardedLoaded()
     }
 }

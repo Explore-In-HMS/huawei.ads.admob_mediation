@@ -18,6 +18,7 @@ package com.hmscl.huawei.admob_mediation.NativeAds
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import com.google.android.gms.ads.mediation.UnifiedNativeAdMapper
@@ -74,11 +75,13 @@ class HuaweiCustomEventNativeAdsMapper(
     }
 
     override fun recordImpression() {
+        Log.d("TAG","HuaweiCustomEventNativeAdsMapper = recordImpression()")
         huaweiNativeAd.recordImpressionEvent(extras)
     }
 
     override fun handleClick(view: View?) {
         // recordClickEvent will be called automatically when triggerClick called.
+        Log.d("TAG","HuaweiCustomEventNativeAdsMapper = handleClick()")
         huaweiNativeAd.triggerClick(extras)
     }
 }

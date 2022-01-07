@@ -21,7 +21,6 @@ import android.content.Context
 import android.util.Log
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
-import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAd
 import com.google.android.gms.ads.mediation.MediationRewardedAdCallback
@@ -54,12 +53,12 @@ class HuaweiCustomEventRewardedAdEventForwarder(
             override fun onRewardAdFailedToLoad(p0: Int) {
                 super.onRewardAdFailedToLoad(p0)
                 Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${p0.toString()}")
-
             }
 
             override fun onRewardedLoaded() {
                 rewardAd.show(context as Activity?,object : RewardAdStatusListener() {
                     override fun onRewardAdClosed() {
+                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewardAdClosed()")
                         rewardedAdCallback.onAdClosed()
                     }
 
@@ -72,10 +71,12 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                     }
 
                     override fun onRewardAdOpened() {
+                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewardAdOpened()")
                         rewardedAdCallback.onAdOpened()
                     }
 
                     override fun onRewarded(reward: Reward) {
+                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewarded()")
                         rewardedAdCallback.onUserEarnedReward(HuaweiCustomEventRewardedItemMapper(reward.name,reward.amount))
                     }
                 })

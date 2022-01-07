@@ -64,6 +64,9 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
+        if (serverParameters.isNullOrEmpty()){
+            Log.d(TAG,"Banner serverParameter is empty or null")
+        }
         try {
             this.context = context
             huaweiBannerView = BannerView(context)
@@ -71,7 +74,9 @@ class all_ads : Adapter(),
             huaweiBannerView.adListener = eventForwarder
             if (serverParameters != null) {
                 huaweiBannerAdId = serverParameters
+                Log.d(TAG, "Banner serverParameter $serverParameters")
             }
+
             huaweiBannerView.adId = huaweiBannerAdId
             huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
@@ -90,6 +95,9 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
+        if (serverParameters.isNullOrEmpty()){
+            Log.d(TAG,"Interstitial serverParameter is empty or null")
+        }
         try {
             this.context = context
             huaweiInterstitialView = InterstitialAd(context)
@@ -99,6 +107,7 @@ class all_ads : Adapter(),
             )
             if (serverParameters != null) {
                 huaweiInterstitialAdId = serverParameters
+                Log.d(TAG, "Interstitial serverParameter $serverParameters")
             }
             huaweiInterstitialView.adId = huaweiInterstitialAdId
             huaweiInterstitialView.loadAd(configureAdRequest(mediationAdRequest))
@@ -124,6 +133,9 @@ class all_ads : Adapter(),
         mediationAdRequest: NativeMediationAdRequest,
         customEventExtras: Bundle?
     ) {
+        if (serverParameter.isNullOrEmpty()){
+            Log.d(TAG,"Native serverParameter is empty or null")
+        }
         try {
             this.context = context
             val options = mediationAdRequest.nativeAdOptions
@@ -170,8 +182,8 @@ class all_ads : Adapter(),
 
             if (serverParameter != null) {
                 huaweiNativeAdId = serverParameter
+                Log.d(TAG, "Native serverParameter $serverParameter")
             }
-            Log.d(TAG, "serverParameter $serverParameter")
             val loadedEventForwarder = HuaweiCustomEventNativeAdsLoadedEventForwarder(
                 listener!!,
                 options,
@@ -247,15 +259,21 @@ class all_ads : Adapter(),
     }
 
     override fun onDestroy() {
-        huaweiBannerView.destroy()
+        if (huaweiBannerView != null) {
+            huaweiBannerView.destroy()
+        }
     }
 
     override fun onPause() {
-        huaweiBannerView.pause()
+        if (huaweiBannerView != null) {
+            huaweiBannerView.pause()
+        }
     }
 
     override fun onResume() {
-        huaweiBannerView.resume()
+        if (huaweiBannerView != null) {
+            huaweiBannerView.resume()
+        }
     }
 
     override fun initialize(

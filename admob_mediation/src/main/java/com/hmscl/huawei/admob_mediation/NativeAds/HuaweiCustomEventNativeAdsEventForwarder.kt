@@ -25,6 +25,7 @@ class HuaweiCustomEventNativeAdsEventForwarder (
     private val options: NativeAdOptions
 ) : HuaweiCustomEventNativeAdsListener() {
     override fun onAdClosed() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdClosed()")
         listener.onAdClosed()
         super.onAdClosed()
     }
@@ -36,23 +37,29 @@ class HuaweiCustomEventNativeAdsEventForwarder (
     }
 
     override fun onAdLeave() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdLeave()")
         super.onAdLeave()
     }
 
     override fun onAdOpened() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdOpened()")
         listener.onAdOpened()
         super.onAdOpened()
     }
 
     override fun onAdLoaded() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdLoaded()")
         super.onAdLoaded()
     }
 
     override fun onAdClicked() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdClicked()")
         listener.onAdClicked()
     }
 
     override fun onAdImpression() {
+        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdImpression()")
+        listener.onAdImpression()
         super.onAdImpression()
     }
 }
