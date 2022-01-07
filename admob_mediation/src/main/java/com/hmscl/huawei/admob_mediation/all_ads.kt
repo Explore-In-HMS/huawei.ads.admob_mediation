@@ -37,6 +37,7 @@ import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.lang.IllegalArgumentException
 
 
 class all_ads : Adapter(),
@@ -64,8 +65,9 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
-        if (serverParameters.isNullOrEmpty()){
-            Log.d(TAG,"Banner serverParameter is empty or null")
+        Log.d(TAG, "enter requestBannerAd")
+        if (serverParameters.isNullOrEmpty()) {
+            Log.d(TAG, "Banner serverParameter is empty or null")
         }
         try {
             this.context = context
@@ -95,6 +97,7 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
+        Log.d(TAG,"enter requestInterstitialAd")
         if (serverParameters.isNullOrEmpty()){
             Log.d(TAG,"Interstitial serverParameter is empty or null")
         }
@@ -133,6 +136,7 @@ class all_ads : Adapter(),
         mediationAdRequest: NativeMediationAdRequest,
         customEventExtras: Bundle?
     ) {
+        Log.d(TAG,"Enter requestNativeAd")
         if (serverParameter.isNullOrEmpty()){
             Log.d(TAG,"Native serverParameter is empty or null")
         }
