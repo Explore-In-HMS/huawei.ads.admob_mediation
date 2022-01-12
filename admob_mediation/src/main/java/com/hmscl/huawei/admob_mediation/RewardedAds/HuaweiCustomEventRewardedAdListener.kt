@@ -17,16 +17,19 @@
 package com.hmscl.huawei.admob_mediation.RewardedAds
 
 import android.util.Log
+import com.hmscl.huawei.admob_mediation.BannerAds.HuaweiCustomEventBannerEventForwarder
 import com.huawei.hms.ads.reward.RewardAdLoadListener
 
-open class HuaweiCustomEventRewardedAdListener: RewardAdLoadListener() {
+open class HuaweiCustomEventRewardedAdListener : RewardAdLoadListener() {
+    private val TAG = HuaweiCustomEventRewardedAdListener::class.java.simpleName
+
     override fun onRewardAdFailedToLoad(errorCode: Int) {
         super.onRewardAdFailedToLoad(errorCode)
-        Log.e("TAG", "HuaweiCustomEventRewardedAdListener = ${errorCode.toString()}")
+        Log.e(TAG, "HuaweiCustomEventRewardedAdListener = ${errorCode.toString()}")
     }
 
     override fun onRewardedLoaded() {
-        Log.d("TAG", "HuaweiCustomEventRewardedAdListener = onRewardedLoaded()")
+        Log.d(TAG, "HuaweiCustomEventRewardedAdListener = onRewardedLoaded()")
         super.onRewardedLoaded()
     }
 }

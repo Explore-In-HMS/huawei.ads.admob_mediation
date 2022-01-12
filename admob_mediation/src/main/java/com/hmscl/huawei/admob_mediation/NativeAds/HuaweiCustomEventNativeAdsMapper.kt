@@ -29,6 +29,7 @@ class HuaweiCustomEventNativeAdsMapper(
     private var huaweiNativeAd: NativeAd,
     private val context: Context
 ) : UnifiedNativeAdMapper() {
+    private var TAG = HuaweiCustomEventNativeAdsMapper::class.java.simpleName
 
     init {
         if (huaweiNativeAd.choicesInfo.content != "" && huaweiNativeAd.choicesInfo.icons.size > 0) {
@@ -75,13 +76,13 @@ class HuaweiCustomEventNativeAdsMapper(
     }
 
     override fun recordImpression() {
-        Log.d("TAG","HuaweiCustomEventNativeAdsMapper = recordImpression()")
+        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper = recordImpression()")
         huaweiNativeAd.recordImpressionEvent(extras)
     }
 
     override fun handleClick(view: View?) {
         // recordClickEvent will be called automatically when triggerClick called.
-        Log.d("TAG","HuaweiCustomEventNativeAdsMapper = handleClick()")
+        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper = handleClick()")
         huaweiNativeAd.triggerClick(extras)
     }
 }

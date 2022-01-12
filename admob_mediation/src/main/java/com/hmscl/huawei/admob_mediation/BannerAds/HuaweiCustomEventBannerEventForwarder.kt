@@ -27,35 +27,36 @@ class HuaweiCustomEventBannerEventForwarder(
     private var listener: CustomEventBannerListener,
     private var huaweiBannerView: BannerView
 ) : AdListener() {
+    private val TAG = HuaweiCustomEventBannerEventForwarder::class.java.simpleName
+
     override fun onAdLoaded() {
-        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdLoaded()")
+        Log.d(TAG, "HuaweiCustomEventBannerEventForwarder =  onAdLoaded()")
         listener.onAdLoaded(huaweiBannerView)
     }
 
     override fun onAdFailed(errorCode: Int) {
-        Log.e("TAG", "HuaweiCustomEventBannerEventForwarder = ${errorCode.toString()}")
-      //  listener.onAdFailedToLoad(AdError(AdParam.ErrorCode.INNER, AdParam.ErrorCode.INNER.toString(),"HuaweiBannerAds"))
-        listener.onAdFailedToLoad(errorCode)
+        Log.e(TAG, "HuaweiCustomEventBannerEventForwarder = ${errorCode.toString()}")
+        listener.onAdFailedToLoad(AdError(errorCode, "Huawei Banner Ads", "onFailure"))
 
     }
 
     override fun onAdClosed() {
-        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdClosed()")
+        Log.d(TAG, "HuaweiCustomEventBannerEventForwarder =  onAdClosed()")
         listener.onAdClosed()
     }
 
     override fun onAdLeave() {
-        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdLeave()")
+        Log.d(TAG, "HuaweiCustomEventBannerEventForwarder =  onAdLeave()")
         listener.onAdLeftApplication()
     }
 
     override fun onAdOpened() {
-        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdOpened()")
+        Log.d(TAG, "HuaweiCustomEventBannerEventForwarder =  onAdOpened()")
         listener.onAdOpened()
     }
 
     override fun onAdClicked() {
-        Log.d("TAG", "HuaweiCustomEventBannerEventForwarder =  onAdClicked()")
+        Log.d(TAG, "HuaweiCustomEventBannerEventForwarder =  onAdClicked()")
         listener.onAdClicked()
 
     }

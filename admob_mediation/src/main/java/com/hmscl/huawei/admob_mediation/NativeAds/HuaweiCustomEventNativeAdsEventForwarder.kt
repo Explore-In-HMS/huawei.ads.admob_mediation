@@ -17,6 +17,7 @@
 package com.hmscl.huawei.admob_mediation.NativeAds
 
 import android.util.Log
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.mediation.customevent.CustomEventNativeListener
 
@@ -24,36 +25,37 @@ class HuaweiCustomEventNativeAdsEventForwarder (
     private val listener: CustomEventNativeListener,
     private val options: NativeAdOptions
 ) : HuaweiCustomEventNativeAdsListener() {
+    private var TAG = HuaweiCustomEventNativeAdsEventForwarder::class.java.simpleName
     override fun onAdClosed() {
-        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdClosed()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder =  onAdClosed()")
         listener.onAdClosed()
         super.onAdClosed()
     }
 
     override fun onAdFailed(p0: Int) {
-        listener.onAdFailedToLoad(p0)
-        Log.d("TAG","HuaweiCustomEventNativeAdsEventForwarder = ${p0.toString()}")
+        listener.onAdFailedToLoad(AdError(p0,"HuaweiCustomEventNativeAdsEventForwarder","onAdFailed()"))
+        Log.d(TAG,"HuaweiCustomEventNativeAdsEventForwarder = ${p0.toString()}")
         super.onAdFailed(p0)
     }
 
     override fun onAdLeave() {
-        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdLeave()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder =  onAdLeave()")
         super.onAdLeave()
     }
 
     override fun onAdOpened() {
-        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdOpened()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder =  onAdOpened()")
         listener.onAdOpened()
         super.onAdOpened()
     }
 
     override fun onAdLoaded() {
-        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdLoaded()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder =  onAdLoaded()")
         super.onAdLoaded()
     }
 
     override fun onAdClicked() {
-        Log.d("TAG", "HuaweiCustomEventNativeAdsEventForwarder =  onAdClicked()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder =  onAdClicked()")
         listener.onAdClicked()
     }
 

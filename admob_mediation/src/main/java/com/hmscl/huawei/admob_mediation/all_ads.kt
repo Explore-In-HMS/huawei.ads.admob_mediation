@@ -37,7 +37,6 @@ import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.lang.IllegalArgumentException
 
 
 class all_ads : Adapter(),
@@ -56,6 +55,9 @@ class all_ads : Adapter(),
     private var huaweiRewardedAdId = "testx9dtjwj8hp"
 
     private var context: Context? = null
+
+    private var mInitializationCompleteCallback: InitializationCompleteCallback? = null
+
 
     override fun requestBannerAd(
         context: Context?,
@@ -180,7 +182,7 @@ class all_ads : Adapter(),
             }
 
             Log.d(
-                "TAG",
+                TAG,
                 "adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted.toString()
             )
 
@@ -285,6 +287,11 @@ class all_ads : Adapter(),
         initializationCompleteCallback: InitializationCompleteCallback,
         mediationConfiguration: MutableList<MediationConfiguration>?
     ) {
+        Log.d(TAG, "enter initialize")
+
+        mInitializationCompleteCallback = initializationCompleteCallback
+
+        mInitializationCompleteCallback?.onInitializationSucceeded()
 
     }
 

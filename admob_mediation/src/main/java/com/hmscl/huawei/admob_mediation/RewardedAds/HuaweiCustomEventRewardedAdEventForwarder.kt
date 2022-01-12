@@ -21,6 +21,7 @@ import android.content.Context
 import android.util.Log
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAd
 import com.google.android.gms.ads.mediation.MediationRewardedAdCallback
@@ -34,53 +35,43 @@ import com.huawei.hms.ads.reward.RewardAdLoadListener
 import com.huawei.hms.ads.reward.RewardAdStatusListener
 
 class HuaweiCustomEventRewardedAdEventForwarder(
-        private val adConfiguration: MediationRewardedAdConfiguration,
-        private val mediationAdLoadCallBack: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>
-): HuaweiCustomEventRewardedAdListener(),MediationRewardedAd {
+    private val adConfiguration: MediationRewardedAdConfiguration,
+    private val mediationAdLoadCallBack: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>,
+) : HuaweiCustomEventRewardedAdListener(), MediationRewardedAd {
     private lateinit var rewardedAdCallback: MediationRewardedAdCallback
     private lateinit var rewardAd: RewardAd
     private var rewardAdId = "testx9dtjwj8hp"
+    private val TAG = HuaweiCustomEventRewardedAdEventForwarder::class.java.simpleName
+
     fun load(adUnit: String?) {
         if (adUnit != null) {
             rewardAdId = adUnit
         }
-        this.rewardedAdCallback = mediationAdLoadCallBack.onSuccess(this)
-    }
+        if (adConfiguration == null || mediationAdLoadCallBack == null) {
+            Log.d(TAG, "AdConfiguration or mediationAdLoadCallBack  is null")
+            return
+        }
 
-    override fun showAd(context: Context?) {
-        rewardAd = RewardAd(context, rewardAdId)
-        val listener = object : RewardAdLoadListener() {
+        rewardAd = RewardAd(adConfiguration.context, rewardAdId)
+
+        val listenerRewarded = object : RewardAdLoadListener() {
             override fun onRewardAdFailedToLoad(p0: Int) {
                 super.onRewardAdFailedToLoad(p0)
-                Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${p0.toString()}")
+                Log.d(
+                    TAG,
+                    "HuaweiCustomEventRewardedAdEventForwarder =  onRewardAdFailedToLoad() = $p0"
+                )
+                mediationAdLoadCallBack.onFailure(AdError(p0, "Rewarded Ads", "onFailure"))
             }
 
             override fun onRewardedLoaded() {
-                rewardAd.show(context as Activity?,object : RewardAdStatusListener() {
-                    override fun onRewardAdClosed() {
-                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewardAdClosed()")
-                        rewardedAdCallback.onAdClosed()
-                    }
+                super.onRewardedLoaded()
+                Log.d(TAG, "HuaweiCustomEventRewardedAdEventForwarder =  onRewardedLoaded()")
+                rewardedAdCallback =
+                    mediationAdLoadCallBack.onSuccess(this@HuaweiCustomEventRewardedAdEventForwarder)
 
-                    override fun onRewardAdFailedToShow(errorCode: Int) {
-                      //  rewardedAdCallback.onAdFailedToShow(AdError(errorCode,"Rewarded Ads","Failed to show"))
-                        rewardedAdCallback.onAdFailedToShow("Rewarded Ads Failed to show = ${errorCode.toString()}")
-
-                        Log.e("TAG", "HuaweiCustomEventRewardedAdEventForwarder = ${errorCode.toString() + "Failed to show"}")
-
-                    }
-
-                    override fun onRewardAdOpened() {
-                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewardAdOpened()")
-                        rewardedAdCallback.onAdOpened()
-                    }
-
-                    override fun onRewarded(reward: Reward) {
-                        Log.d("TAG", "HuaweiCustomEventRewardedAdEventForwarder = onRewarded()")
-                        rewardedAdCallback.onUserEarnedReward(HuaweiCustomEventRewardedItemMapper(reward.name,reward.amount))
-                    }
-                })
             }
+
         }
 
         val adParam = AdParam.Builder()
@@ -90,7 +81,7 @@ class HuaweiCustomEventRewardedAdEventForwarder(
          */
         try {
             val consentStatus: ConsentStatus =
-                ConsentInformation.getInstance(context).consentStatus
+                ConsentInformation.getInstance(adConfiguration.context).consentStatus
             if (consentStatus == ConsentStatus.NON_PERSONALIZED)
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
             else if (consentStatus == ConsentStatus.PERSONALIZED)
@@ -103,7 +94,7 @@ class HuaweiCustomEventRewardedAdEventForwarder(
          * TCF2.0
          */
         try {
-            val sharedPref = context?.getSharedPreferences(
+            val sharedPref = adConfiguration.context?.getSharedPreferences(
                 "SharedPreferences",
                 Context.MODE_PRIVATE
             )
@@ -117,6 +108,53 @@ class HuaweiCustomEventRewardedAdEventForwarder(
             Log.i(this.toString(), "configureAdRequest: TCFString couldn't read")
         }
 
-        rewardAd.loadAd(adParam.build(), listener)
+        rewardAd.loadAd(adParam.build(), listenerRewarded)
+    }
+
+    override fun showAd(context: Context?) {
+
+        if (rewardAd.isLoaded) {
+
+            rewardAd.show(context as Activity?, object : RewardAdStatusListener() {
+                override fun onRewardAdClosed() {
+                    Log.d(TAG, "HuaweiCustomEventRewardedAdEventForwarder =  onRewardAdClosed()")
+                    rewardedAdCallback.onAdClosed()
+                }
+
+                override fun onRewardAdFailedToShow(errorCode: Int) {
+                    Log.d(
+                        TAG,
+                        "HuaweiCustomEventRewardedAdEventForwarder =  onRewardAdFailedToShow() = $errorCode"
+                    )
+                    rewardedAdCallback.onAdFailedToShow(
+                        AdError(
+                            errorCode,
+                            "Rewarded Ads",
+                            "Failed to show"
+                        )
+                    )
+                }
+
+                override fun onRewardAdOpened() {
+                    Log.d(TAG, "HuaweiCustomEventRewardedAdEventForwarder =  onRewardAdOpened()")
+                    rewardedAdCallback.onAdOpened()
+                }
+
+                override fun onRewarded(reward: Reward) {
+                    Log.d(
+                        TAG,
+                        "HuaweiCustomEventRewardedAdEventForwarder =  onRewarded() = ${reward.name} + ${reward.amount}"
+                    )
+                    rewardedAdCallback.onUserEarnedReward(
+                        HuaweiCustomEventRewardedItemMapper(
+                            reward.name,
+                            reward.amount
+                        )
+                    )
+                }
+            })
+        }
+
+
     }
 }
