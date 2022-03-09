@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.2-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.7-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
  
