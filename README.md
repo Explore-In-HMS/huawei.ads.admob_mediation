@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.7-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.9-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
  
@@ -78,7 +78,7 @@ In the app-level build.gradle, include Huawei Ads dependency (required by the ad
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.49.305'
+    implementation 'com.huawei.hms:ads:3.4.52.302'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -86,7 +86,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.49.305'
+    implementation 'com.huawei.hms:ads-lite:13.4.52.302'
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
 }
 ```
@@ -138,6 +138,10 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 
 # Version Change History
+
+## 1.2.9
+
+Update Huawei Ads SDK. Resolved the compatibility issue of the network component OkHttp.
 
 ## 1.2.7
 
