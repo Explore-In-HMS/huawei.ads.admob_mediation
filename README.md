@@ -141,7 +141,7 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 
 ## 1.2.9
 
-Resolved the compatibility issue of the network component OkHttp.
+Update Huawei Ads SDK. Resolved the compatibility issue of the network component OkHttp.
 
 ## 1.2.7
 
