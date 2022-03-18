@@ -42,7 +42,7 @@ Make sure to check the article on **[How to Use Huawei Ads with Google Ad Manage
 1. Sign in to [Google Ad Manager console](https://admanager.google.com/home/)
 2. Add Huawei as a Ad Network Company by selecting Other company in Ad Network section
 3. Go to "**Delivery  -> Yield groups**" (or, use one of the existing groups)
-4. 	Create a yield group and add Huawei as a yield partner
+4. Create a yield group and add Huawei as a yield partner
 5. Enter the class name "**com.hmscl.huawei.admob\_mediation.all\_ads**" as the Class Name, and your Huawei's AdUnit ID from step 1 as the parameter
 6. Add the adapter and its dependencies into your project
 7. Configuration of custom event is done.
@@ -94,8 +94,6 @@ dependencies {
 
 [Check the latest version of adapter here](#version-change-history)
 
-
-
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
 ## **Permissions**
@@ -134,9 +132,6 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
     ...
 </application>
 ```
-
-
-
 # Version Change History
 
 ## 1.2.9
@@ -167,6 +162,36 @@ Min SDK updated.
 
 Transparency & Consent Framework v2.0 and personalized & non-personalized ads configurations are integrated.
 
+# Supported Networks through Admob Mediation
+
+## IronSource through Admob Mediation
+
+### IronSource Ad Network Compatibility
+
+|   | Banner Ad | Interstitial Ad | Rewarded Ad | Native Ad |
+| --- | --- | --- | --- | --- |
+| Native (Java/Kotlin) | ✅ | ✅ | ✅ | ❌ |
+| Unity |✅|✅| ✅ | ❌ |
+
+If you want to integrate Ironsource network through Admob mediation follow these steps.
+
+1. Add Admob for mediation at IronSource SDK Networks.
+2. Enter your App ID and Ad Unit ID from Admob.
+3. Add IronSource admob adapter and gms play services dependency to the project. 
+
+### **Scenario 1: If Publisher has IronSource mediation with Admob**
+If you have **IronSource mediation with Admob** you just need to integrate the Huawei admob mediation adapter and make the necessary changes we mentioned on the Admob panel. </br>[Follow here for the integration steps](#integrate-huawei-sdk)</br>
+### **Scenario 2: If Publisher has only IronSource Ads**
+If there is **only IronSource ads in the application**, admob mediation must be done first from the IronSource panel, and then **Huawei admob adapter** must be added.</br> For this, admob mediation should be done on IronSource first, and then admob mediation adapter should be added to the project as it was done in the first step.
+
+```groovy
+dependencies {
+ implementation 'com.google.android.gms:play-services-ads:20.2.0'
+ implementation 'com.ironsource.adapters:admobadapter:4.3.22'
+ implementation 'com.huawei.hms:ads:3.4.47.302'
+ implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+ }
+```
 # Platforms
 
 ## Native
@@ -483,7 +508,3 @@ Native Ad
 </tr>
 </tr>
 </table>
-
-
-
-
