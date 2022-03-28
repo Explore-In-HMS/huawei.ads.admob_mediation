@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021. Explore in HMS. All rights reserved.
+ *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,22 @@
 package com.hmscl.huawei.admob_mediation.NativeAds
 
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import com.google.android.gms.ads.mediation.UnifiedNativeAdMapper
-import com.hmscl.huawei.admob_mediation.NativeAds.HuaweiCustomEventNativeAdsImageMapper
 import com.huawei.hms.ads.nativead.NativeAd
 
-class HuaweiCustomEventNativeAdsMapper(
+class HuaweiUnifiedNativeAdMapper(
     private var huaweiNativeAd: NativeAd,
     private val context: Context
 ) : UnifiedNativeAdMapper() {
-    private var TAG = HuaweiCustomEventNativeAdsMapper::class.java.simpleName
+    private var TAG = HuaweiUnifiedNativeAdMapper::class.java.simpleName
 
     init {
+        Log.d(TAG, "HuaweiUnifiedNativeAdMapper - init()")
         if (huaweiNativeAd.choicesInfo.content != "" && huaweiNativeAd.choicesInfo.icons.size > 0) {
-            val whyThisAd: Button = Button(context)
+            val whyThisAd = Button(context)
             whyThisAd.setCompoundDrawables(
                 huaweiNativeAd.choicesInfo.icons[0].drawable,
                 null,
@@ -76,13 +75,13 @@ class HuaweiCustomEventNativeAdsMapper(
     }
 
     override fun recordImpression() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper = recordImpression()")
+        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper - recordImpression()")
         huaweiNativeAd.recordImpressionEvent(extras)
     }
 
     override fun handleClick(view: View?) {
         // recordClickEvent will be called automatically when triggerClick called.
-        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper = handleClick()")
+        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper - handleClick()")
         huaweiNativeAd.triggerClick(extras)
     }
 }

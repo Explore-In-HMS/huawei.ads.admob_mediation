@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021. Explore in HMS. All rights reserved.
+ *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  *  limitations under the License.
  */
 
-package com.hmscl.huawei.admob_mediation.NativeAds
+package com.hmscl.huawei.admob_mediation
 
-import com.huawei.hms.ads.nativead.NativeAd
+object BuildConfigMediation {
+    val DEBUG = true
+    const val LIBRARY_PACKAGE_NAME = "com.hmscl.huawei.admob_mediation"
+    const val BUILD_TYPE = "debug"
 
-open class HuaweiCustomEventNativeAdsLoadedListener: NativeAd.NativeAdLoadedListener {
-    override fun onNativeAdLoaded(native: NativeAd) {
-        TODO("Not yet implemented")
-    }
+    // Field from default config.
+    const val ADAPTER_VERSION = "1.2.0"
+    const val ADS_SDK_VERSION = "3.4.52.302"
 }

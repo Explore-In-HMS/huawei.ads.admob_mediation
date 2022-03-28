@@ -14,19 +14,21 @@
  *  limitations under the License.
  */
 
-package com.hmscl.huawei.admob_mediation.RewardedAds
+package com.hmscl.huawei.admob_mediation
 
-import com.google.android.gms.ads.rewarded.RewardItem
+enum class ErrorCode(val Id: Int) {
+    UNKNOWN(0), BAD_REQUEST(1), NETWORK_ERROR(2), NO_INVENTORY(3);
 
-class HuaweiCustomEventRewardedItemMapper(
-        private val type: String,
-        private val amount: Int
-): RewardItem {
-    override fun getType(): String {
-        return type
-    }
-
-    override fun getAmount(): Int {
-        return amount
+    companion object {
+        @JvmStatic //to be accessible from java
+        fun fromInt(givenInt: Int): ErrorCode {
+            return when (givenInt) {
+                UNKNOWN.Id -> UNKNOWN
+                BAD_REQUEST.Id -> BAD_REQUEST
+                NETWORK_ERROR.Id -> NETWORK_ERROR
+                NO_INVENTORY.Id -> NO_INVENTORY
+                else -> throw Exception("Invalid id `$givenInt`, available ids are ${values().map { it.Id }}") // or a null or something
+            }
+        }
     }
 }
