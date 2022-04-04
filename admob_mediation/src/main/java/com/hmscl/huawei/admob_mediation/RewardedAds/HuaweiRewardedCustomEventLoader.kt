@@ -112,7 +112,7 @@ class HuaweiRewardedCustomEventLoader(
 
             override fun onRewardAdLeftApp() {
                 Log.d(TAG, "RewardedEventLoader - loadAd() - onRewardAdLeftApp()")
-                //TODO("Not yet implemented")
+
             }
 
             override fun onRewardAdLoaded() {
