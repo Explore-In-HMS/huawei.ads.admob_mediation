@@ -150,7 +150,7 @@ class HuaweiInterstitialCustomEventLoader(
          */
         adParam.setTagForChildProtection(mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment())
         Log.d("TagforChildLog", mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment().toString())
-        //not everything is configured!!
+
         return adParam.build()
     }
 

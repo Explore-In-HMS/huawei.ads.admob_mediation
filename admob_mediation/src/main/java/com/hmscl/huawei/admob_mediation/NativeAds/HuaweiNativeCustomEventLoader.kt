@@ -138,16 +138,6 @@ class HuaweiNativeCustomEventLoader(
         }
     }
 
-    fun onAdFetchFailed(errorCode: ErrorCode?) {
-        mediationAdLoadCallback.onFailure(
-            AdError(
-            CustomEventError.ERROR_AD_FETCH_FAILED,
-            "Ad fetch failed",
-            CustomEventError.CUSTOM_EVENT_ERROR_DOMAIN
-        )
-        )
-    }
-
     override fun onNativeAdLoaded(native: NativeAd) {
         Log.d(TAG, "NativeEventLoader - onNativeAdLoaded()")
         mapper = context?.let { HuaweiUnifiedNativeAdMapper(native, it) }!!
@@ -207,7 +197,7 @@ class HuaweiNativeCustomEventLoader(
          */
         adParam.setTagForChildProtection(mediationNativeAdConfiguration.taggedForChildDirectedTreatment())
         Log.d(TAG,"TagforChildLog" + mediationNativeAdConfiguration.taggedForChildDirectedTreatment().toString())
-        //not everything is configured!!
+
         return adParam.build()
     }
 
@@ -220,7 +210,14 @@ class HuaweiNativeCustomEventLoader(
         super.onAdFailed(p0)
         Log.e(
             TAG,
-            "NativeEventLoader - onAdFailed() - Failed to load Huawei banner with code: ${p0}."
+            "NativeEventLoader - onAdFailed() - Failed to load Huawei native with code: ${p0}."
+        )
+        mediationAdLoadCallback.onFailure(
+            AdError(
+                CustomEventError.ERROR_AD_FETCH_FAILED,
+                "Ad fetch failed",
+                CustomEventError.CUSTOM_EVENT_ERROR_DOMAIN
+            )
         )
     }
 

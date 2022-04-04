@@ -77,10 +77,7 @@ object CustomEventError {
             ErrorCode.BAD_REQUEST -> 1
             ErrorCode.NO_INVENTORY -> 2
             ErrorCode.NETWORK_ERROR -> 3
+            else -> 99
         }
-        return 99
     }
-
-    @IntDef(value = [ERROR_NO_AD_UNIT_ID, ERROR_AD_NOT_AVAILABLE, ERROR_NO_ACTIVITY_CONTEXT])
-    annotation class SampleCustomEventErrorCode
 }

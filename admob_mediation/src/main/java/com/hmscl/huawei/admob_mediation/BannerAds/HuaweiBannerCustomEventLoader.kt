@@ -170,7 +170,7 @@ class HuaweiBannerCustomEventLoader(
          */
         adParam.setTagForChildProtection(bannerAdRequest.taggedForChildDirectedTreatment())
         Log.d("TagforChildLog", bannerAdRequest.taggedForChildDirectedTreatment().toString())
-        //not everything is configured!!
+
         return adParam.build()
     }
 
