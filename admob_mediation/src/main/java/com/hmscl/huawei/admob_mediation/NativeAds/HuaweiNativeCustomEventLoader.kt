@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,11 @@ import android.util.Log
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.mediation.*
+import com.google.android.gms.ads.mediation.MediationAdLoadCallback
+import com.google.android.gms.ads.mediation.MediationNativeAdCallback
+import com.google.android.gms.ads.mediation.MediationNativeAdConfiguration
+import com.google.android.gms.ads.mediation.UnifiedNativeAdMapper
 import com.hmscl.huawei.admob_mediation.CustomEventError
-import com.hmscl.huawei.admob_mediation.ErrorCode
 import com.huawei.hms.ads.*
 import com.huawei.hms.ads.nativead.NativeAd
 import com.huawei.hms.ads.nativead.NativeAdConfiguration
@@ -39,7 +41,7 @@ class HuaweiNativeCustomEventLoader(
     /** Callback that fires on loading success or failure.  */
     private val mediationAdLoadCallback: MediationAdLoadCallback<UnifiedNativeAdMapper, MediationNativeAdCallback>
 ) : NativeAd.NativeAdLoadedListener, AdListener() {
-    private var context : Context? = null
+    private var context: Context? = null
     private val TAG = HuaweiNativeCustomEventLoader::class.java.simpleName
     private lateinit var mapper: HuaweiUnifiedNativeAdMapper
 
@@ -53,10 +55,11 @@ class HuaweiNativeCustomEventLoader(
     fun loadAd() {
         Log.d(TAG, "NativeEventLoader - loadAd()")
         this.context = mediationNativeAdConfiguration.context
-        val serverParameter = mediationNativeAdConfiguration.serverParameters.getString("parameter").toString()
+        val serverParameter =
+            mediationNativeAdConfiguration.serverParameters.getString("parameter").toString()
 
-        if (serverParameter.isEmpty()){
-            Log.e(TAG,"Native serverParameter is empty or null")
+        if (serverParameter.isEmpty()) {
+            Log.e(TAG, "Native serverParameter is empty or null")
         }
         try {
             val options = mediationNativeAdConfiguration.nativeAdOptions
@@ -97,7 +100,6 @@ class HuaweiNativeCustomEventLoader(
             val adListener = object : AdListener() {
 
 
-
                 override fun onAdLeave() {
                     super.onAdLeave()
                 }
@@ -121,7 +123,7 @@ class HuaweiNativeCustomEventLoader(
             }
 
             val builder = NativeAdLoader.Builder(context, serverParameter)
-            val nativeAdLoader =builder.build()
+            val nativeAdLoader = builder.build()
             builder.setNativeAdOptions(adConfiguration)
             builder.setNativeAdLoadedListener { nativeAd ->
                 if (!nativeAdLoader.isLoading) {
@@ -141,7 +143,8 @@ class HuaweiNativeCustomEventLoader(
     override fun onNativeAdLoaded(native: NativeAd) {
         Log.d(TAG, "NativeEventLoader - onNativeAdLoaded()")
         mapper = context?.let { HuaweiUnifiedNativeAdMapper(native, it) }!!
-        mediationNativeAdCallback = mediationAdLoadCallback.onSuccess(mapper as UnifiedNativeAdMapper)
+        mediationNativeAdCallback =
+            mediationAdLoadCallback.onSuccess(mapper as UnifiedNativeAdMapper)
     }
 
     private fun configureAdRequest(mediationNativeAdConfiguration: MediationNativeAdConfiguration): AdParam {
@@ -154,7 +157,7 @@ class HuaweiNativeCustomEventLoader(
         bundle.keySet()?.forEach { key ->
             adParam.addKeyword(key)
             Log.d("MediationKeywordsLog", key.toString())
-            content += "\""+key+"\""+ ":[\"" +bundle.get(key) + "\"],"
+            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
         }
         content.dropLast(1)
         content += "}"
@@ -196,7 +199,10 @@ class HuaweiNativeCustomEventLoader(
          * COPPA
          */
         adParam.setTagForChildProtection(mediationNativeAdConfiguration.taggedForChildDirectedTreatment())
-        Log.d(TAG,"TagforChildLog" + mediationNativeAdConfiguration.taggedForChildDirectedTreatment().toString())
+        Log.d(TAG,
+            "TagforChildLog" + mediationNativeAdConfiguration.taggedForChildDirectedTreatment()
+                .toString()
+        )
 
         return adParam.build()
     }

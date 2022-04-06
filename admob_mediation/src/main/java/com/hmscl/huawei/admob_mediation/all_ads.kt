@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import androidx.annotation.Keep
 import com.google.android.gms.ads.mediation.*
 import com.hmscl.huawei.admob_mediation.BannerAds.HuaweiBannerCustomEventLoader
 import com.hmscl.huawei.admob_mediation.InterstitialAds.HuaweiInterstitialCustomEventLoader
-import com.hmscl.huawei.admob_mediation.RewardedAds.HuaweiRewardedCustomEventLoader
 import com.hmscl.huawei.admob_mediation.NativeAds.HuaweiNativeCustomEventLoader
+import com.hmscl.huawei.admob_mediation.RewardedAds.HuaweiRewardedCustomEventLoader
 
 @Keep
 class all_ads : Adapter() {

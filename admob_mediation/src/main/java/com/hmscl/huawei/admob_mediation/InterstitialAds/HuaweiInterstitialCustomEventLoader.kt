@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,10 @@ import android.util.Log
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.mediation.*
+import com.google.android.gms.ads.mediation.MediationAdLoadCallback
+import com.google.android.gms.ads.mediation.MediationInterstitialAd
+import com.google.android.gms.ads.mediation.MediationInterstitialAdCallback
+import com.google.android.gms.ads.mediation.MediationInterstitialAdConfiguration
 import com.hmscl.huawei.admob_mediation.CustomEventError
 import com.huawei.hms.ads.*
 
@@ -37,6 +40,7 @@ class HuaweiInterstitialCustomEventLoader(
 ) : MediationInterstitialAd {
     private val TAG = HuaweiInterstitialCustomEventLoader::class.java.simpleName
     private var context: Context? = null
+
     /** Huawei interstitial ad.  */
     private lateinit var huaweiInterstitialView: InterstitialAd
 
@@ -61,32 +65,42 @@ class HuaweiInterstitialCustomEventLoader(
         // Implement a HuaweiAdListener and forward callbacks to mediation.
         val adListener = object : AdListener() {
             override fun onAdLoaded() {
-                Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdLoaded() - Ad loaded successfully")
-                interstitialAdCallback = mediationAdLoadCallback.onSuccess(this@HuaweiInterstitialCustomEventLoader)
+                Log.d(
+                    TAG,
+                    "InterstitialEventLoader - loadAd() - onAdLoaded() - Ad loaded successfully"
+                )
+                interstitialAdCallback =
+                    mediationAdLoadCallback.onSuccess(this@HuaweiInterstitialCustomEventLoader)
             }
+
             override fun onAdFailed(errorCode: Int) {
                 Log.e(
                     TAG,
                     "InterstitialEventLoader - loadAd() - onAdFailed() - Failed to load Huawei banner with code: ${errorCode}."
                 )
-                val adError = AdError(errorCode,"AdFailed",
+                val adError = AdError(
+                    errorCode, "AdFailed",
                     CustomEventError.SAMPLE_SDK_DOMAIN
                 )
                 mediationAdLoadCallback.onFailure(adError)
             }
+
             override fun onAdOpened() {
                 Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdOpened()")
                 interstitialAdCallback?.onAdOpened()
             }
+
             override fun onAdClicked() {
                 Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdClicked()")
 
                 interstitialAdCallback?.reportAdClicked()
             }
+
             override fun onAdLeave() {
                 Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdLeave()")
                 interstitialAdCallback?.onAdLeftApplication()
             }
+
             override fun onAdClosed() {
                 Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdClosed()")
                 interstitialAdCallback?.onAdClosed()
@@ -107,7 +121,7 @@ class HuaweiInterstitialCustomEventLoader(
         bundle.keySet()?.forEach { key ->
             adParam.addKeyword(key)
             Log.d("MediationKeywordsLog", key.toString())
-            content += "\""+key+"\""+ ":[\"" +bundle.get(key) + "\"],"
+            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
         }
         content.dropLast(1)
         content += "}"
@@ -149,7 +163,10 @@ class HuaweiInterstitialCustomEventLoader(
          * COPPA
          */
         adParam.setTagForChildProtection(mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment())
-        Log.d("TagforChildLog", mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment().toString())
+        Log.d(
+            "TagforChildLog",
+            mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment().toString()
+        )
 
         return adParam.build()
     }

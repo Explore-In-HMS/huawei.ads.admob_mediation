@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,10 @@ import com.hmscl.huawei.admob_mediation.ErrorCode
 import com.huawei.hms.ads.AdParam
 import com.huawei.hms.ads.HwAds
 import com.huawei.hms.ads.NonPersonalizedAd
-import com.huawei.hms.ads.reward.*
+import com.huawei.hms.ads.reward.Reward
+import com.huawei.hms.ads.reward.RewardAd
+import com.huawei.hms.ads.reward.RewardAdListener
+import com.huawei.hms.ads.reward.RewardAdLoadListener
 
 /** Rewarded custom event loader for the Huawei Ads SDK.  */
 class HuaweiRewardedCustomEventLoader(
@@ -77,7 +80,7 @@ class HuaweiRewardedCustomEventLoader(
         }
         sampleRewardedAd = RewardAd(context, serverParameter)
 
-        val rewardAdListener : RewardAdListener = object : RewardAdListener {
+        val rewardAdListener: RewardAdListener = object : RewardAdListener {
             override fun onRewarded(p0: Reward?) {
                 if (p0 != null) {
                     Log.d(
@@ -117,7 +120,8 @@ class HuaweiRewardedCustomEventLoader(
 
             override fun onRewardAdLoaded() {
                 Log.d(TAG, "RewardedEventLoader - loadAd() - onRewardAdLoaded()")
-                rewardedAdCallback = mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
+                rewardedAdCallback =
+                    mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
             }
 
             override fun onRewardAdOpened() {
@@ -145,7 +149,7 @@ class HuaweiRewardedCustomEventLoader(
         bundle.keySet()?.forEach { key ->
             adParam.addKeyword(key)
             Log.d("MediationKeywordsLog", key.toString())
-            content += "\""+key+"\""+ ":[\"" +bundle.get(key) + "\"],"
+            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
         }
         content.dropLast(1)
         content += "}"
@@ -196,12 +200,15 @@ class HuaweiRewardedCustomEventLoader(
 
             override fun onRewardedLoaded() {
                 super.onRewardedLoaded()
-                Log.d(TAG, "RewardedEventLoader - loadAd() - onRewardedLoaded() - Ad loaded successfully")
+                Log.d(
+                    TAG,
+                    "RewardedEventLoader - loadAd() - onRewardedLoaded() - Ad loaded successfully"
+                )
                 rewardedAdCallback =
                     mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
             }
         }
-        sampleRewardedAd.loadAd(adParam.build(),listenerRewarded)
+        sampleRewardedAd.loadAd(adParam.build(), listenerRewarded)
     }
 
     override fun showAd(context: Context) {

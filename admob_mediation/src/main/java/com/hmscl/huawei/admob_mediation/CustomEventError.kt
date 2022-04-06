@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 
 package com.hmscl.huawei.admob_mediation
 
-import androidx.annotation.IntDef
 import com.google.android.gms.ads.AdError
-import com.hmscl.huawei.admob_mediation.ErrorCode
 
 object CustomEventError {
     const val SAMPLE_SDK_DOMAIN = "com.huawei.hms.ads"
@@ -27,7 +25,7 @@ object CustomEventError {
     /** Error raised when the custom event adapter cannot obtain the ad unit id.  */
     const val ERROR_NO_AD_UNIT_ID = 101
 
-    const val ERROR_AD_FETCH_FAILED=104
+    const val ERROR_AD_FETCH_FAILED = 104
 
     /**
      * Error raised when the custom event adapter does not have an ad available when trying to show

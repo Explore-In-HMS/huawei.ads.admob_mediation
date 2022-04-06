@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,10 @@ import android.view.View
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.mediation.*
+import com.google.android.gms.ads.mediation.MediationAdLoadCallback
+import com.google.android.gms.ads.mediation.MediationBannerAd
+import com.google.android.gms.ads.mediation.MediationBannerAdCallback
+import com.google.android.gms.ads.mediation.MediationBannerAdConfiguration
 import com.hmscl.huawei.admob_mediation.CustomEventError
 import com.huawei.hms.ads.*
 import com.huawei.hms.ads.banner.BannerView
@@ -51,14 +54,16 @@ class HuaweiBannerCustomEventLoader(
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
         this.context = mediationBannerAdConfiguration.context
-        val serverParameter:String = mediationBannerAdConfiguration.serverParameters.getString("parameter").toString()
+        val serverParameter: String =
+            mediationBannerAdConfiguration.serverParameters.getString("parameter").toString()
         if (TextUtils.isEmpty(serverParameter)) {
             mediationAdLoadCallback.onFailure(
                 AdError(
                     CustomEventError.ERROR_NO_AD_UNIT_ID,
                     "Ad unit id is empty",
                     CustomEventError.CUSTOM_EVENT_ERROR_DOMAIN
-                ))
+                )
+            )
             return
         }
         val context = mediationBannerAdConfiguration.context
@@ -81,31 +86,38 @@ class HuaweiBannerCustomEventLoader(
         val adListener: AdListener = object : AdListener() {
             override fun onAdLoaded() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdLoaded() - Ad loaded successfully")
-                bannerAdCallback = mediationAdLoadCallback.onSuccess(this@HuaweiBannerCustomEventLoader)
+                bannerAdCallback =
+                    mediationAdLoadCallback.onSuccess(this@HuaweiBannerCustomEventLoader)
 
             }
+
             override fun onAdFailed(errorCode: Int) {
                 Log.e(
                     TAG,
                     "BannerEventLoader - loadAd() - onAdFailed() - Failed to load Huawei banner with code: ${errorCode}."
                 )
-                val adError = AdError(errorCode,"AdFailed",
+                val adError = AdError(
+                    errorCode, "AdFailed",
                     CustomEventError.SAMPLE_SDK_DOMAIN
                 )
                 mediationAdLoadCallback.onFailure(adError)
             }
+
             override fun onAdOpened() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdOpened()")
                 bannerAdCallback?.onAdOpened()
             }
+
             override fun onAdClicked() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdClicked()")
                 bannerAdCallback?.reportAdClicked()
             }
+
             override fun onAdLeave() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdLeave()")
                 bannerAdCallback?.onAdLeftApplication()
             }
+
             override fun onAdClosed() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdClosed()")
                 bannerAdCallback?.onAdClosed()
@@ -125,12 +137,11 @@ class HuaweiBannerCustomEventLoader(
         bundle.keySet()?.forEach { key ->
             adParam.addKeyword(key)
             Log.d("MediationKeywordsLog", key.toString())
-            content += "\""+key+"\""+ ":[\"" +bundle.get(key) + "\"],"
+            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
         }
         content.dropLast(1)
         content += "}"
         adParam.setContentBundle(content)
-
 
 
         /**

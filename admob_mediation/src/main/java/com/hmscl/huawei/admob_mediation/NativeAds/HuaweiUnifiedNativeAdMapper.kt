@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,13 +75,13 @@ class HuaweiUnifiedNativeAdMapper(
     }
 
     override fun recordImpression() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper - recordImpression()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsMapper - recordImpression()")
         huaweiNativeAd.recordImpressionEvent(extras)
     }
 
     override fun handleClick(view: View?) {
         // recordClickEvent will be called automatically when triggerClick called.
-        Log.d(TAG,"HuaweiCustomEventNativeAdsMapper - handleClick()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsMapper - handleClick()")
         huaweiNativeAd.triggerClick(extras)
     }
 }
