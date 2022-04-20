@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021. Explore in HMS. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.google.android.gms:play-services-ads:19.5.0'
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.huawei.hms:ads:3.4.52.302'
     implementation 'com.google.android.ads.consent:consent-library:1.0.8'
 

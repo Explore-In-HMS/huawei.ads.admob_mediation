@@ -14,6 +14,15 @@
  *  limitations under the License.
  */
 
-include ':admob_mediation'
-include ':app'
-rootProject.name = "mediationjitpack"
+package com.hmscl.huawei.admob_mediation
+
+object BuildConfigMediation {
+    val DEBUG = true
+    const val LIBRARY_PACKAGE_NAME = "com.hmscl.huawei.admob_mediation"
+    const val BUILD_TYPE = "debug"
+
+    //TODO Will be updated with each version update
+    //Field from default config.
+    const val ADAPTER_VERSION = "2.0.0"
+    const val ADS_SDK_VERSION = "3.4.52.302"
+}

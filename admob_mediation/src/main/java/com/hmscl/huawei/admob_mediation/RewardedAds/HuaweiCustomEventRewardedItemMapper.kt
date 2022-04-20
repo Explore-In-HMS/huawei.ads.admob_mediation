@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021. Explore in HMS. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package com.hmscl.huawei.admob_mediation.RewardedAds
 import com.google.android.gms.ads.rewarded.RewardItem
 
 class HuaweiCustomEventRewardedItemMapper(
-        private val type: String,
-        private val amount: Int
-): RewardItem {
+    private val type: String,
+    private val amount: Int
+) : RewardItem {
     override fun getType(): String {
         return type
     }

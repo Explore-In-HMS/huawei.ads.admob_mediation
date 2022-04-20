@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021. Explore in HMS. All rights reserved.
+ *   Copyright 2022. Explore in HMS. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import android.net.Uri
 import com.google.android.gms.ads.formats.NativeAd
 import com.huawei.hms.ads.Image
 
-class HuaweiCustomEventNativeAdsImageMapper(private val icon: Image): NativeAd.Image() {
+class HuaweiCustomEventNativeAdsImageMapper(private val icon: Image) : NativeAd.Image() {
     override fun getDrawable(): Drawable {
         return icon.drawable
     }
@@ -32,13 +32,5 @@ class HuaweiCustomEventNativeAdsImageMapper(private val icon: Image): NativeAd.I
 
     override fun getScale(): Double {
         return icon.scale
-    }
-
-    override fun getWidth(): Int {
-        return icon.width
-    }
-
-    override fun getHeight(): Int {
-        return icon.height
     }
 }
