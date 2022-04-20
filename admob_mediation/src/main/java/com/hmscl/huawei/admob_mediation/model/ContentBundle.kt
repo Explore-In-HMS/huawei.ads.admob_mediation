@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022. Explore in HMS. All rights reserved.
+ *   Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  *  limitations under the License.
  */
 
-package com.hmscl.huawei.admob_mediation
+package com.hmscl.huawei.admob_mediation.model
 
-object BuildConfigMediation {
-    val DEBUG = true
-    const val LIBRARY_PACKAGE_NAME = "com.hmscl.huawei.admob_mediation"
-    const val BUILD_TYPE = "debug"
-
-    // Field from default config.
-    const val ADAPTER_VERSION = "2.0.0"
-    const val ADS_SDK_VERSION = "3.4.52.302"
+class ContentBundle{
+    var channelCategoryCode : String = ""
+    var title: String = ""
+    var tags: String = ""
+    var relatedPeople: String = ""
+    var content: String = ""
+    var contentID: String = ""
+    var category: String = ""
+    var subcategory: String = ""
+    var thirdCategory: String = ""
 }

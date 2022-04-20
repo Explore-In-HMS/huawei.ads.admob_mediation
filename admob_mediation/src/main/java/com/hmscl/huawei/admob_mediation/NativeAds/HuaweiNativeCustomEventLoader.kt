@@ -18,15 +18,15 @@ package com.hmscl.huawei.admob_mediation.NativeAds
 
 import android.content.Context
 import android.util.Log
-import com.google.ads.consent.ConsentInformation
-import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationNativeAdCallback
 import com.google.android.gms.ads.mediation.MediationNativeAdConfiguration
 import com.google.android.gms.ads.mediation.UnifiedNativeAdMapper
 import com.hmscl.huawei.admob_mediation.CustomEventError
-import com.huawei.hms.ads.*
+import com.hmscl.huawei.admob_mediation.configureAdRequest
+import com.huawei.hms.ads.AdListener
+import com.huawei.hms.ads.VideoConfiguration
 import com.huawei.hms.ads.nativead.NativeAd
 import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
@@ -131,7 +131,7 @@ class HuaweiNativeCustomEventLoader(
                 }
             }.setAdListener(this)
 
-            nativeAdLoader.loadAd(configureAdRequest(mediationNativeAdConfiguration))
+            nativeAdLoader.loadAd(mediationNativeAdConfiguration.configureAdRequest())
         } catch (e: Exception) {
 
             val stacktrace =
@@ -145,66 +145,6 @@ class HuaweiNativeCustomEventLoader(
         mapper = context?.let { HuaweiUnifiedNativeAdMapper(native, it) }!!
         mediationNativeAdCallback =
             mediationAdLoadCallback.onSuccess(mapper as UnifiedNativeAdMapper)
-    }
-
-    private fun configureAdRequest(mediationNativeAdConfiguration: MediationNativeAdConfiguration): AdParam {
-        Log.d(TAG, "NativeEventLoader - configureAdRequest()")
-        val adParam = AdParam.Builder()
-
-        val bundle = mediationNativeAdConfiguration.mediationExtras
-
-        var content = "{"
-        bundle.keySet()?.forEach { key ->
-            adParam.addKeyword(key)
-            Log.d("MediationKeywordsLog", key.toString())
-            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
-        }
-        content.dropLast(1)
-        content += "}"
-        adParam.setContentBundle(content)
-
-        /**
-         * NPA-PA
-         */
-        try {
-            val consentStatus: ConsentStatus =
-                ConsentInformation.getInstance(this.context).consentStatus
-            if (consentStatus == ConsentStatus.NON_PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
-            else if (consentStatus == ConsentStatus.PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.e(TAG, "configureAdRequest: Consent status couldn't read")
-        }
-
-        /**
-         * TCF2.0
-         */
-        try {
-            val sharedPref = context?.getSharedPreferences(
-                "SharedPreferences",
-                Context.MODE_PRIVATE
-            )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
-
-            if (tcfString != null && tcfString != "") {
-                val requestOptions = HwAds.getRequestOptions()
-                requestOptions.toBuilder().setConsent(tcfString).build()
-            }
-        } catch (exception: java.lang.Exception) {
-            Log.e(TAG, "configureAdRequest: TCFString couldn't read")
-        }
-
-        /**
-         * COPPA
-         */
-        adParam.setTagForChildProtection(mediationNativeAdConfiguration.taggedForChildDirectedTreatment())
-        Log.d(TAG,
-            "TagforChildLog" + mediationNativeAdConfiguration.taggedForChildDirectedTreatment()
-                .toString()
-        )
-
-        return adParam.build()
     }
 
     override fun onAdClosed() {

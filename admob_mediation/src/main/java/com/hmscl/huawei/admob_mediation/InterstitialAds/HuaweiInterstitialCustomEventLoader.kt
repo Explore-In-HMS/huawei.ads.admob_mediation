@@ -21,15 +21,15 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import com.google.ads.consent.ConsentInformation
-import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationInterstitialAd
 import com.google.android.gms.ads.mediation.MediationInterstitialAdCallback
 import com.google.android.gms.ads.mediation.MediationInterstitialAdConfiguration
 import com.hmscl.huawei.admob_mediation.CustomEventError
-import com.huawei.hms.ads.*
+import com.hmscl.huawei.admob_mediation.configureAdRequest
+import com.huawei.hms.ads.AdListener
+import com.huawei.hms.ads.InterstitialAd
 
 /** Interstitial custom event loader for Huawei Ads SDK.  */
 class HuaweiInterstitialCustomEventLoader(
@@ -92,7 +92,6 @@ class HuaweiInterstitialCustomEventLoader(
 
             override fun onAdClicked() {
                 Log.d(TAG, "InterstitialEventLoader - loadAd() - onAdClicked()")
-
                 interstitialAdCallback?.reportAdClicked()
             }
 
@@ -109,66 +108,7 @@ class HuaweiInterstitialCustomEventLoader(
         huaweiInterstitialView.adListener = adListener
 
         // Make an ad request.
-        huaweiInterstitialView.loadAd(configureAdRequest(mediationInterstitialAdConfiguration))
-    }
-
-    private fun configureAdRequest(mediationInterstitialAdConfiguration: MediationInterstitialAdConfiguration): AdParam {
-        Log.d(TAG, "InterstitialEventLoader - configureAdRequest()")
-        val adParam = AdParam.Builder()
-
-        val bundle = mediationInterstitialAdConfiguration.mediationExtras
-        var content = "{"
-        bundle.keySet()?.forEach { key ->
-            adParam.addKeyword(key)
-            Log.d("MediationKeywordsLog", key.toString())
-            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
-        }
-        content.dropLast(1)
-        content += "}"
-        adParam.setContentBundle(content)
-
-        /**
-         * NPA-PA
-         */
-        try {
-            val consentStatus: ConsentStatus =
-                ConsentInformation.getInstance(this.context).consentStatus
-            if (consentStatus == ConsentStatus.NON_PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
-            else if (consentStatus == ConsentStatus.PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: Consent status couldn't read")
-        }
-
-        /**
-         * TCF2.0
-         */
-        try {
-            val sharedPref = context?.getSharedPreferences(
-                "SharedPreferences",
-                Context.MODE_PRIVATE
-            )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
-
-            if (tcfString != null && tcfString != "") {
-                val requestOptions = HwAds.getRequestOptions()
-                requestOptions.toBuilder().setConsent(tcfString).build()
-            }
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: TCFString couldn't read")
-        }
-
-        /**
-         * COPPA
-         */
-        adParam.setTagForChildProtection(mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment())
-        Log.d(
-            "TagforChildLog",
-            mediationInterstitialAdConfiguration.taggedForChildDirectedTreatment().toString()
-        )
-
-        return adParam.build()
+        huaweiInterstitialView.loadAd(mediationInterstitialAdConfiguration.configureAdRequest())
     }
 
     override fun showAd(p0: Context) {

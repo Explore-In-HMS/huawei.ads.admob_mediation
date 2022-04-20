@@ -20,8 +20,6 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import com.google.ads.consent.ConsentInformation
-import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAd
@@ -29,9 +27,7 @@ import com.google.android.gms.ads.mediation.MediationRewardedAdCallback
 import com.google.android.gms.ads.mediation.MediationRewardedAdConfiguration
 import com.hmscl.huawei.admob_mediation.CustomEventError
 import com.hmscl.huawei.admob_mediation.ErrorCode
-import com.huawei.hms.ads.AdParam
-import com.huawei.hms.ads.HwAds
-import com.huawei.hms.ads.NonPersonalizedAd
+import com.hmscl.huawei.admob_mediation.configureAdRequest
 import com.huawei.hms.ads.reward.Reward
 import com.huawei.hms.ads.reward.RewardAd
 import com.huawei.hms.ads.reward.RewardAdListener
@@ -142,52 +138,6 @@ class HuaweiRewardedCustomEventLoader(
         }
         sampleRewardedAd.rewardAdListener = rewardAdListener
 
-        val adParam = AdParam.Builder()
-
-        val bundle = mediationRewardedAdConfiguration.mediationExtras
-        var content = "{"
-        bundle.keySet()?.forEach { key ->
-            adParam.addKeyword(key)
-            Log.d("MediationKeywordsLog", key.toString())
-            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
-        }
-        content.dropLast(1)
-        content += "}"
-
-        adParam.setContentBundle(content)
-
-        /**
-         * NPA-PA
-         */
-        try {
-            val consentStatus: ConsentStatus =
-                ConsentInformation.getInstance(mediationRewardedAdConfiguration.context).consentStatus
-            if (consentStatus == ConsentStatus.NON_PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
-            else if (consentStatus == ConsentStatus.PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.e(this.toString(), "configureAdRequest: Consent status couldn't read")
-        }
-
-        /**
-         * TCF2.0
-         */
-        try {
-            val sharedPref = mediationRewardedAdConfiguration.context?.getSharedPreferences(
-                "SharedPreferences",
-                Context.MODE_PRIVATE
-            )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
-
-            if (tcfString != null && tcfString != "") {
-                val requestOptions = HwAds.getRequestOptions()
-                requestOptions.toBuilder().setConsent(tcfString).build()
-            }
-        } catch (exception: java.lang.Exception) {
-            Log.e(this.toString(), "configureAdRequest: TCFString couldn't read")
-        }
-
         val listenerRewarded = object : RewardAdLoadListener() {
             override fun onRewardAdFailedToLoad(p0: Int) {
                 super.onRewardAdFailedToLoad(p0)
@@ -208,7 +158,10 @@ class HuaweiRewardedCustomEventLoader(
                     mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
             }
         }
-        sampleRewardedAd.loadAd(adParam.build(), listenerRewarded)
+        sampleRewardedAd.loadAd(
+            mediationRewardedAdConfiguration.configureAdRequest(),
+            listenerRewarded
+        )
     }
 
     override fun showAd(context: Context) {

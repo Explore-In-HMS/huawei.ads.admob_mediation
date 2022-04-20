@@ -21,15 +21,15 @@ import android.content.res.Resources
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import com.google.ads.consent.ConsentInformation
-import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationBannerAd
 import com.google.android.gms.ads.mediation.MediationBannerAdCallback
 import com.google.android.gms.ads.mediation.MediationBannerAdConfiguration
 import com.hmscl.huawei.admob_mediation.CustomEventError
-import com.huawei.hms.ads.*
+import com.hmscl.huawei.admob_mediation.configureAdRequest
+import com.huawei.hms.ads.AdListener
+import com.huawei.hms.ads.BannerAdSize
 import com.huawei.hms.ads.banner.BannerView
 
 /** Banner custom event loader for Huawei Ads SDK.  */
@@ -124,65 +124,8 @@ class HuaweiBannerCustomEventLoader(
             }
         }
         huaweiBannerView.adListener = adListener
-        huaweiBannerView.loadAd(configureAdRequest(mediationBannerAdConfiguration))
+        huaweiBannerView.loadAd(mediationBannerAdConfiguration.configureAdRequest())
 
-    }
-
-    private fun configureAdRequest(bannerAdRequest: MediationBannerAdConfiguration): AdParam {
-        Log.d(TAG, "BannerEventLoader - configureAdRequest()")
-        val adParam = AdParam.Builder()
-
-        val bundle = mediationBannerAdConfiguration.mediationExtras
-        var content = "{"
-        bundle.keySet()?.forEach { key ->
-            adParam.addKeyword(key)
-            Log.d("MediationKeywordsLog", key.toString())
-            content += "\"" + key + "\"" + ":[\"" + bundle.get(key) + "\"],"
-        }
-        content.dropLast(1)
-        content += "}"
-        adParam.setContentBundle(content)
-
-
-        /**
-         * NPA-PA
-         */
-        try {
-            val consentStatus: ConsentStatus =
-                ConsentInformation.getInstance(this.context).consentStatus
-            if (consentStatus == ConsentStatus.NON_PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
-            else if (consentStatus == ConsentStatus.PERSONALIZED)
-                adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: Consent status couldn't read")
-        }
-
-        /**
-         * TCF2.0
-         */
-        try {
-            val sharedPref = context?.getSharedPreferences(
-                "SharedPreferences",
-                Context.MODE_PRIVATE
-            )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
-
-            if (tcfString != null && tcfString != "") {
-                val requestOptions = HwAds.getRequestOptions()
-                requestOptions.toBuilder().setConsent(tcfString).build()
-            }
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: TCFString couldn't read")
-        }
-
-        /**
-         * COPPA
-         */
-        adParam.setTagForChildProtection(bannerAdRequest.taggedForChildDirectedTreatment())
-        Log.d("TagforChildLog", bannerAdRequest.taggedForChildDirectedTreatment().toString())
-
-        return adParam.build()
     }
 
     override fun getView(): View {
