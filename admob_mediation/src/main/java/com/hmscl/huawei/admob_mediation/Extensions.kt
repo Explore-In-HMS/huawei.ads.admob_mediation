@@ -75,7 +75,7 @@ fun MediationAdConfiguration.configureAdRequest(): AdParam {
             "SharedPreferences",
             Context.MODE_PRIVATE
         )
-        val tcfString = sharedPref?.getString("IABTCF_TCString", "");
+        val tcfString = sharedPref?.getString("IABTCF_TCString", "")
 
         if (tcfString != null && tcfString != "") {
             val requestOptions = HwAds.getRequestOptions()

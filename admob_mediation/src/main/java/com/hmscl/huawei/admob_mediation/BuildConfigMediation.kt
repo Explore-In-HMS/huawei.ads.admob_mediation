@@ -19,10 +19,10 @@ package com.hmscl.huawei.admob_mediation
 object BuildConfigMediation {
     val DEBUG = true
     const val LIBRARY_PACKAGE_NAME = "com.hmscl.huawei.admob_mediation"
-    const val BUILD_TYPE = "debug"
+    const val BUILD_TYPE = "release"
 
     //TODO Will be updated with each version update
     //Field from default config.
     const val ADAPTER_VERSION = "2.0.0"
-    const val ADS_SDK_VERSION = "3.4.52.302"
+    const val ADS_SDK_VERSION = "3.4.54.300"
 }
