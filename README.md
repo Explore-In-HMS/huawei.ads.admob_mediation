@@ -112,12 +112,14 @@ dependencies {
 }
 ```
 
-[Check the latest Huawei Ads SDK here](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909)
-
-[Check the latest version of adapter for Admob SDK 20.6.0 or above](#version-change-history)
-
-[Check the latest version of adapter for Admob SDK 20.5.0 or below](https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/develop/under-20#version-change-history)
-
+<h3>Latest version of SDKs</h3>
+<ul>
+  <li><a href="https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909">Check the latest Huawei Ads SDK here</a></li>
+  <li><a href="https://developers.google.com/admob/android/rel-notes">Check the latest Google AdMob SDK here</a></li>
+  <li><a href="https://github.com/googleads/googleads-consent-sdk-android">Check the latest Google Consent SDK here</a></li>
+  <li><a href="#version-change-history">Check the latest version of adapter for Admob SDK 20.6.0 or above</a></li>
+  <li><a href="https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/develop/under-20#version-change-history">Check the latest version of adapter for Admob SDK 20.5.0 or below</a></li>
+</ul>
 
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
