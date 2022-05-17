@@ -14,19 +14,15 @@
  *  limitations under the License.
  */
 
-package com.hmscl.huawei.admob_mediation.RewardedAds
+package com.hmscl.huawei.admob_mediation
 
-import com.google.android.gms.ads.rewarded.RewardItem
+object BuildConfigMediation {
+    val DEBUG = true
+    const val LIBRARY_PACKAGE_NAME = "com.hmscl.huawei.admob_mediation"
+    const val BUILD_TYPE = "release"
 
-class HuaweiCustomEventRewardedItemMapper(
-    private val type: String,
-    private val amount: Int
-) : RewardItem {
-    override fun getType(): String {
-        return type
-    }
-
-    override fun getAmount(): Int {
-        return amount
-    }
+    //TODO Will be updated with each version update
+    //Field from default config.
+    const val ADAPTER_VERSION = "2.0.0"
+    const val ADS_SDK_VERSION = "3.4.54.300"
 }

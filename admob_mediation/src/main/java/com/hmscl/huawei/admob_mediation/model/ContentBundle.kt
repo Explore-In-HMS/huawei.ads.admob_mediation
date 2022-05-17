@@ -14,12 +14,16 @@
  *  limitations under the License.
  */
 
-package com.hmscl.huawei.admob_mediation.NativeAds
+package com.hmscl.huawei.admob_mediation.model
 
-import com.huawei.hms.ads.nativead.NativeAd
-
-open class HuaweiCustomEventNativeAdsLoadedListener: NativeAd.NativeAdLoadedListener {
-    override fun onNativeAdLoaded(native: NativeAd) {
-        TODO("Not yet implemented")
-    }
+class ContentBundle{
+    var channelCategoryCode : String = ""
+    var title: String = ""
+    var tags: String = ""
+    var relatedPeople: String = ""
+    var content: String = ""
+    var contentID: String = ""
+    var category: String = ""
+    var subcategory: String = ""
+    var thirdCategory: String = ""
 }

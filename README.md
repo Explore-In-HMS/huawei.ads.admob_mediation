@@ -1,6 +1,8 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.7-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.0-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.12-yellow) 
+<br> 
+![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
  
@@ -42,7 +44,7 @@ Make sure to check the article on **[How to Use Huawei Ads with Google Ad Manage
 1. Sign in to [Google Ad Manager console](https://admanager.google.com/home/)
 2. Add Huawei as a Ad Network Company by selecting Other company in Ad Network section
 3. Go to "**Delivery  -> Yield groups**" (or, use one of the existing groups)
-4. 	Create a yield group and add Huawei as a yield partner
+4. Create a yield group and add Huawei as a yield partner
 5. Enter the class name "**com.hmscl.huawei.admob\_mediation.all\_ads**" as the Class Name, and your Huawei's AdUnit ID from step 1 as the parameter
 6. Add the adapter and its dependencies into your project
 7. Configuration of custom event is done.
@@ -74,27 +76,50 @@ allprojects {
 ```
 <h1 id="app-level">
 </h1>
-In the app-level build.gradle, include Huawei Ads dependency (required by the adapter) and the adapter
+In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the adapter, Google Consent SDK is optional.
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.49.305'
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+    //Huawei Ads Prime
+    implementation 'com.huawei.hms:ads-prime:<latest_version>'
+    //Google AdMob SDK
+    implementation 'com.google.android.gms:play-services-ads:<latest_version>'
+    //Optional: Google Consent SDK
+    implementation "com.google.android.ads.consent:consent-library:<latest_version>"
 }
 ```
 > **_NOTE:_**  If your app can run only on Huawei mobile phones, you can integrate the Huawei Ads Lite SDK instead of Huawei Ads SDK (Optional)
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.49.305'
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+    ...
+    //Huawei Ads Lite
+    implementation 'com.huawei.hms:ads-lite:<latest_version>'
+    ...
 }
 ```
-[Check the latest Huawei Ads SDK here](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909)
+> **_NOTE:_** To implement Huawei Ads Admob mediation adapter :
 
-[Check the latest version of adapter here](#version-change-history)
+```groovy
+dependencies {
+    ...
+    //If your app uses Google Admob SDK 20.6.0 and above versions, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_above_20.6.0>'
+    ...
+    
+    //If your app uses Google Admob SDK 20.5.0 and below version, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_below_20.5.0>'
+}
+```
 
-
+<h3>Latest version of SDKs</h3>
+<ul>
+  <li><a href="https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909">Check the latest Huawei Ads SDK here</a></li>
+  <li><a href="https://developers.google.com/admob/android/rel-notes">Check the latest Google AdMob SDK here</a></li>
+  <li><a href="https://github.com/googleads/googleads-consent-sdk-android">Check the latest Google Consent SDK here</a></li>
+  <li><a href="#version-change-history">Check the latest version of adapter for Admob SDK 20.6.0 or above</a></li>
+  <li><a href="https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/develop/under-20#version-change-history">Check the latest version of adapter for Admob SDK 20.5.0 or below</a></li>
+</ul>
 
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
@@ -134,14 +159,31 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
     ...
 </application>
 ```
-
-
-
 # Version Change History
+
+## 2.0.0
+
+Library updated to support Admob's new mediation classes.
+
+## 1.2.9
+
+Update Huawei Ads SDK. Resolved the compatibility issue of the network component OkHttp.
+
+## 1.2.8
+
+Minor fixes.
 
 ## 1.2.7
 
 Logs issue fixed.
+
+## 1.2.6
+
+Logging structure updated, code infrastructure optimized.
+
+## 1.2.5
+
+Bug fix.
 
 ## 1.2.4
 
@@ -163,6 +205,36 @@ Min SDK updated.
 
 Transparency & Consent Framework v2.0 and personalized & non-personalized ads configurations are integrated.
 
+# Supported Networks through Admob Mediation
+
+## IronSource through Admob Mediation
+
+### IronSource Ad Network Compatibility
+
+|   | Banner Ad | Interstitial Ad | Rewarded Ad | Native Ad |
+| --- | --- | --- | --- | --- |
+| Native (Java/Kotlin) | ✅ | ✅ | ✅ | ❌ |
+| Unity |✅|✅| ✅ | ❌ |
+
+If you want to integrate Ironsource network through Admob mediation follow these steps.
+
+1. Add Admob for mediation at IronSource SDK Networks.
+2. Enter your App ID and Ad Unit ID from Admob.
+3. Add IronSource admob adapter and gms play services dependency to the project. 
+
+### **Scenario 1: If Publisher has IronSource mediation with Admob**
+If you have **IronSource mediation with Admob** you just need to integrate the Huawei admob mediation adapter and make the necessary changes we mentioned on the Admob panel. </br>[Follow here for the integration steps](#integrate-huawei-sdk)</br>
+### **Scenario 2: If Publisher has only IronSource Ads**
+If there is **only IronSource ads in the application**, admob mediation must be done first from the IronSource panel, and then **Huawei admob adapter** must be added.</br> For this, admob mediation should be done on IronSource first, and then admob mediation adapter should be added to the project as it was done in the first step.
+
+```groovy
+dependencies {
+ implementation 'com.google.android.gms:play-services-ads:20.2.0'
+ implementation 'com.ironsource.adapters:admobadapter:4.3.22'
+ implementation 'com.huawei.hms:ads:3.4.47.302'
+ implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+ }
+```
 # Platforms
 
 ## Native
@@ -479,7 +551,3 @@ Native Ad
 </tr>
 </tr>
 </table>
-
-
-
-
