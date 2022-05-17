@@ -172,12 +172,12 @@ class HuaweiRewardedCustomEventLoader(
             )
             return
         }
-        if (!sampleRewardedAd!!.isLoaded) {
+        if (!sampleRewardedAd.isLoaded) {
             rewardedAdCallback?.onAdFailedToShow(
                 CustomEventError.createCustomEventAdNotAvailableError()
             )
             return
         }
-        sampleRewardedAd!!.show(context)
+        sampleRewardedAd.show(context)
     }
 }

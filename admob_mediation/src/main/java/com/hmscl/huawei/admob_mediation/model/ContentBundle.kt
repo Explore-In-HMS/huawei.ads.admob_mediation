@@ -16,8 +16,8 @@
 
 package com.hmscl.huawei.admob_mediation.model
 
-class ContentBundle{
-    var channelCategoryCode : String = ""
+class ContentBundle {
+    var channelCategoryCode: String = ""
     var title: String = ""
     var tags: String = ""
     var relatedPeople: String = ""

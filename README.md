@@ -1,6 +1,8 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![Latest Version](https://img.shields.io/badge/latestVersion-1.2.9-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.0-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.12-yellow) 
+<br> 
+![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
  
@@ -74,25 +76,48 @@ allprojects {
 ```
 <h1 id="app-level">
 </h1>
-In the app-level build.gradle, include Huawei Ads dependency (required by the adapter) and the adapter
+In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the adapter, Google Consent SDK is optional.
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads:3.4.52.302'
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+    //Huawei Ads Prime
+    implementation 'com.huawei.hms:ads-prime:<latest_version>'
+    //Google AdMob SDK
+    implementation 'com.google.android.gms:play-services-ads:<latest_version>'
+    //Optional: Google Consent SDK
+    implementation "com.google.android.ads.consent:consent-library:<latest_version>"
 }
 ```
 > **_NOTE:_**  If your app can run only on Huawei mobile phones, you can integrate the Huawei Ads Lite SDK instead of Huawei Ads SDK (Optional)
 
 ```groovy
 dependencies {
-    implementation 'com.huawei.hms:ads-lite:13.4.52.302'
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
+    ...
+    //Huawei Ads Lite
+    implementation 'com.huawei.hms:ads-lite:<latest_version>'
+    ...
 }
 ```
+> **_NOTE:_** To implement Huawei Ads Admob mediation adapter :
+
+```groovy
+dependencies {
+    ...
+    //If your app uses Google Admob SDK 20.6.0 and above versions, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_above_20.6.0>'
+    ...
+    
+    //If your app uses Google Admob SDK 20.5.0 and below version, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_below_20.5.0>'
+}
+```
+
 [Check the latest Huawei Ads SDK here](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909)
 
-[Check the latest version of adapter here](#version-change-history)
+[Check the latest version of adapter for Admob SDK 20.6.0 or above](#version-change-history)
+
+[Check the latest version of adapter for Admob SDK 20.5.0 or below](https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/develop/under-20#version-change-history)
+
 
 **Important:** _To add Huawei Ads Kit SDK and Mediation adapter, the native project should be opened with Android Studio._
 
@@ -134,13 +159,29 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 ```
 # Version Change History
 
+## 2.0.0
+
+Library updated to support Admob's new mediation classes.
+
 ## 1.2.9
 
 Update Huawei Ads SDK. Resolved the compatibility issue of the network component OkHttp.
 
+## 1.2.8
+
+Minor fixes.
+
 ## 1.2.7
 
 Logs issue fixed.
+
+## 1.2.6
+
+Logging structure updated, code infrastructure optimized.
+
+## 1.2.5
+
+Bug fix.
 
 ## 1.2.4
 
