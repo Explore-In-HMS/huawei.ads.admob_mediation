@@ -92,7 +92,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:<latest_version>'
     //Adapter SDK
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
-    //Optional: Google Consent SDK
+    //Google Consent SDK. Include this SDK if you receive a ConsentInfo error upon receiving a Huawei Ads. This is necessary with the recent Google AdMob SDK updates.
     implementation "com.google.android.ads.consent:consent-library:<latest_version>"
 }
 ```
