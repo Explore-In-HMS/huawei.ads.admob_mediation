@@ -82,7 +82,7 @@ allprojects {
 ```
 
 <h1 id="app-level"></h1>
-In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the plugin, Google Consent SDK is optional.
+In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the plugin.
 
 ```groovy
 dependencies {
