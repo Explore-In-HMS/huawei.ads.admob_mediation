@@ -20,7 +20,6 @@ import android.util.Log
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.customevent.CustomEventBannerListener
 import com.huawei.hms.ads.AdListener
-import com.huawei.hms.ads.AdParam
 import com.huawei.hms.ads.banner.BannerView
 
 class HuaweiCustomEventBannerEventForwarder(

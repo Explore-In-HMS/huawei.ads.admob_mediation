@@ -16,51 +16,58 @@
 
 package com.hmscl.huawei.admob_mediation.InterstitialAds
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.mediation.customevent.CustomEventBannerListener
 import com.google.android.gms.ads.mediation.customevent.CustomEventInterstitialListener
-import com.hmscl.huawei.admob_mediation.BannerAds.HuaweiCustomEventBannerEventForwarder
 import com.huawei.hms.ads.AdListener
-import com.huawei.hms.ads.AdParam
-import com.huawei.hms.ads.InterstitialAd
-import com.huawei.hms.ads.banner.BannerView
 
 class HuaweiCustomEventInterstitialEventForwarder(
-        private var listener: CustomEventInterstitialListener,
-        private var huaweiInterstitialView: InterstitialAd
+    private var listener: CustomEventInterstitialListener
 ) : AdListener() {
     private val TAG = HuaweiCustomEventInterstitialEventForwarder::class.java.simpleName
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onAdLoaded() {
         Log.d(TAG, "HuaweiCustomEventInterstitialEventForwarder =  onAdLoaded()")
-        listener.onAdLoaded()
+        handler.post {
+            listener.onAdLoaded()
+        }
     }
 
     override fun onAdFailed(errorCode: Int) {
-        Log.e(TAG, "HuaweiCustomEventInterstitialEventForwarder = ${errorCode.toString()}")
-        listener.onAdFailedToLoad(AdError(errorCode, "HuaweiInterstitialAds","onAdFailed()"))
+        Log.e(TAG, "HuaweiCustomEventInterstitialEventForwarder = $errorCode")
+        handler.post {
+            listener.onAdFailedToLoad(AdError(errorCode, "HuaweiInterstitialAds", "onAdFailed()"))
+        }
     }
 
     override fun onAdClosed() {
         Log.d(TAG, "HuaweiCustomEventInterstitialEventForwarder =  onAdClosed()")
-        listener.onAdClosed()
+        handler.post {
+            listener.onAdClosed()
+        }
     }
 
     override fun onAdLeave() {
         Log.d(TAG, "HuaweiCustomEventInterstitialEventForwarder =  onAdLeave()")
-        listener.onAdLeftApplication()
+        handler.post {
+            listener.onAdLeftApplication()
+        }
     }
 
     override fun onAdOpened() {
         Log.d(TAG, "HuaweiCustomEventInterstitialEventForwarder =  onAdOpened()")
-        listener.onAdOpened()
+        handler.post {
+            listener.onAdOpened()
+        }
     }
 
     override fun onAdClicked() {
         Log.d(TAG, "HuaweiCustomEventInterstitialEventForwarder =  onAdClicked()")
-        listener.onAdClicked()
-
+        handler.post {
+            listener.onAdClicked()
+        }
     }
-
 }

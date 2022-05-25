@@ -19,39 +19,39 @@ package com.hmscl.huawei.admob_mediation.NativeAds
 import android.util.Log
 import com.huawei.hms.ads.AdListener
 
-open class HuaweiCustomEventNativeAdsListener: AdListener() {
+open class HuaweiCustomEventNativeAdsListener : AdListener() {
     private var TAG = HuaweiCustomEventNativeAdsListener::class.java.simpleName
     override fun onAdClosed() {
         super.onAdClosed()
     }
 
     override fun onAdFailed(p0: Int) {
-        Log.e(TAG,"HuaweiCustomEventNativeAdsListener = ${p0.toString()}")
+        Log.e(TAG, "HuaweiCustomEventNativeAdsListener = ${p0.toString()}")
         super.onAdFailed(p0)
     }
 
     override fun onAdLeave() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsListener = oAdLeave()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsListener = oAdLeave()")
         super.onAdLeave()
     }
 
     override fun onAdOpened() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsListener = oAdOpened()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsListener = oAdOpened()")
         super.onAdOpened()
     }
 
     override fun onAdLoaded() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsListener = oAdLoaded")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsListener = oAdLoaded")
         super.onAdLoaded()
     }
 
     override fun onAdClicked() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsListener = oAdClicked()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsListener = oAdClicked()")
         super.onAdClicked()
     }
 
     override fun onAdImpression() {
-        Log.d(TAG,"HuaweiCustomEventNativeAdsListener = oAdImpression()")
+        Log.d(TAG, "HuaweiCustomEventNativeAdsListener = oAdImpression()")
         super.onAdImpression()
     }
 }

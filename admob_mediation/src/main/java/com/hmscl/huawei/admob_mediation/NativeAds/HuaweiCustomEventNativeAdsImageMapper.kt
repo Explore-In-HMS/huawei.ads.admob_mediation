@@ -21,7 +21,7 @@ import android.net.Uri
 import com.google.android.gms.ads.formats.NativeAd
 import com.huawei.hms.ads.Image
 
-class HuaweiCustomEventNativeAdsImageMapper(private val icon: Image): NativeAd.Image() {
+class HuaweiCustomEventNativeAdsImageMapper(private val icon: Image) : NativeAd.Image() {
     override fun getDrawable(): Drawable {
         return icon.drawable
     }

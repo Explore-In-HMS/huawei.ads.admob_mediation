@@ -27,7 +27,7 @@ class HuaweiCustomEventNativeAdsLoadedEventForwarder(
     private val context: Context
 ) : HuaweiCustomEventNativeAdsLoadedListener() {
     override fun onNativeAdLoaded(native: NativeAd) {
-        val mapper = HuaweiCustomEventNativeAdsMapper(native,context)
+        val mapper = HuaweiCustomEventNativeAdsMapper(native, context)
         listener.onAdLoaded(mapper)
     }
 }
