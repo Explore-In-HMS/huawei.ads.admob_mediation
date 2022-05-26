@@ -21,7 +21,7 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.mediation.customevent.CustomEventNativeListener
 
-class HuaweiCustomEventNativeAdsEventForwarder (
+class HuaweiCustomEventNativeAdsEventForwarder(
     private val listener: CustomEventNativeListener,
     private val options: NativeAdOptions
 ) : HuaweiCustomEventNativeAdsListener() {
@@ -33,8 +33,14 @@ class HuaweiCustomEventNativeAdsEventForwarder (
     }
 
     override fun onAdFailed(p0: Int) {
-        listener.onAdFailedToLoad(AdError(p0,"HuaweiCustomEventNativeAdsEventForwarder","onAdFailed()"))
-        Log.d(TAG,"HuaweiCustomEventNativeAdsEventForwarder = ${p0.toString()}")
+        listener.onAdFailedToLoad(
+            AdError(
+                p0,
+                "HuaweiCustomEventNativeAdsEventForwarder",
+                "onAdFailed()"
+            )
+        )
+        Log.d(TAG, "HuaweiCustomEventNativeAdsEventForwarder = ${p0.toString()}")
         super.onAdFailed(p0)
     }
 

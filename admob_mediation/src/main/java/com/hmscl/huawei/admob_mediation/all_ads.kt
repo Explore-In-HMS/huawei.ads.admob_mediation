@@ -67,11 +67,11 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
-        Log.d(TAG, "enter requestBannerAd")
-        if (serverParameters.isNullOrEmpty()) {
-            Log.d(TAG, "Banner serverParameter is empty or null")
-        }
         try {
+            Log.d(TAG, "enter requestBannerAd")
+            if (serverParameters.isNullOrEmpty()) {
+                Log.d(TAG, "Banner serverParameter is empty or null")
+            }
             this.context = context
             huaweiBannerView = BannerView(context)
             val eventForwarder = HuaweiCustomEventBannerEventForwarder(listener, huaweiBannerView)
@@ -84,7 +84,7 @@ class all_ads : Adapter(),
             huaweiBannerView.adId = huaweiBannerAdId
             huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "Request Banner Ad Failed: $stacktrace")
@@ -99,16 +99,15 @@ class all_ads : Adapter(),
         mediationAdRequest: MediationAdRequest,
         mediationExtras: Bundle?
     ) {
-        Log.d(TAG,"enter requestInterstitialAd")
-        if (serverParameters.isNullOrEmpty()){
-            Log.d(TAG,"Interstitial serverParameter is empty or null")
-        }
         try {
+            Log.d(TAG,"enter requestInterstitialAd")
+            if (serverParameters.isNullOrEmpty()){
+                Log.d(TAG,"Interstitial serverParameter is empty or null")
+            }
             this.context = context
             huaweiInterstitialView = InterstitialAd(context)
             huaweiInterstitialView.adListener = HuaweiCustomEventInterstitialEventForwarder(
-                listener,
-                huaweiInterstitialView
+                listener
             )
             if (serverParameters != null) {
                 huaweiInterstitialAdId = serverParameters
@@ -116,7 +115,7 @@ class all_ads : Adapter(),
             }
             huaweiInterstitialView.adId = huaweiInterstitialAdId
             huaweiInterstitialView.loadAd(configureAdRequest(mediationAdRequest))
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "Request Interstitial Ad Failed: $stacktrace")
@@ -138,11 +137,12 @@ class all_ads : Adapter(),
         mediationAdRequest: NativeMediationAdRequest,
         customEventExtras: Bundle?
     ) {
-        Log.d(TAG,"Enter requestNativeAd")
-        if (serverParameter.isNullOrEmpty()){
-            Log.d(TAG,"Native serverParameter is empty or null")
-        }
+
         try {
+            Log.d(TAG,"Enter requestNativeAd")
+            if (serverParameter.isNullOrEmpty()){
+                Log.d(TAG,"Native serverParameter is empty or null")
+            }
             this.context = context
             val options = mediationAdRequest.nativeAdOptions
 
@@ -206,8 +206,7 @@ class all_ads : Adapter(),
 
             nativeAdLoader = builder.build()
             nativeAdLoader.loadAd(configureAdRequest(mediationAdRequest))
-        } catch (e: Exception) {
-
+        } catch (e: Throwable) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "Request Native Ad Failed: $stacktrace")
@@ -220,7 +219,7 @@ class all_ads : Adapter(),
         val adParam = AdParam.Builder()
         bannerAdRequest.keywords?.forEach { keyword ->
             adParam.addKeyword(keyword)
-            Log.d("MediationKeywordsLog", keyword.toString())
+            Log.d(TAG, "MediationKeywordsLog:" + keyword.toString())
         }
 
         /**
@@ -233,8 +232,10 @@ class all_ads : Adapter(),
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
             else if (consentStatus == ConsentStatus.PERSONALIZED)
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: Consent status couldn't read")
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.w(TAG, "configureAdRequest: Consent status couldn't read: $stacktrace")
         }
 
         /**
@@ -251,16 +252,26 @@ class all_ads : Adapter(),
                 val requestOptions = HwAds.getRequestOptions()
                 requestOptions.toBuilder().setConsent(tcfString).build()
             }
-        } catch (exception: java.lang.Exception) {
-            Log.i(TAG, "configureAdRequest: TCFString couldn't read")
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "configureAdRequest: TCFString couldn't read: $stacktrace")
         }
 
         /**
          * COPPA
          */
-        adParam.setTagForChildProtection(bannerAdRequest.taggedForChildDirectedTreatment())
-        Log.d("TagforChildLog", bannerAdRequest.taggedForChildDirectedTreatment().toString())
-        //not everything is configured!!
+        try {
+            adParam.setTagForChildProtection(bannerAdRequest.taggedForChildDirectedTreatment())
+            Log.d(TAG,"TagforChildLog:" + bannerAdRequest.taggedForChildDirectedTreatment().toString())
+        }
+        catch (exception:Throwable){
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "configureAdRequest: TagForChildProtection couldn't read: $stacktrace")
+
+        }
+
         return adParam.build()
     }
 
@@ -295,25 +306,38 @@ class all_ads : Adapter(),
 
     }
 
+
     override fun getVersionInfo(): VersionInfo {
-        return VersionInfo(1, 1, 1)
+        //TODO Update version info for each release
+        return VersionInfo(1, 2, 13)
     }
 
     override fun getSDKVersionInfo(): VersionInfo {
-        return VersionInfo(1, 1, 1)
+        //TODO Update version info for each release
+        return VersionInfo(3,4,54)
     }
 
     override fun loadRewardedAd(
         mediationRewardedAdConfiguration: MediationRewardedAdConfiguration?,
         mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?
     ) {
-        val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
-            MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
-        )
-        val forwarder = HuaweiCustomEventRewardedAdEventForwarder(
-            mediationRewardedAdConfiguration!!,
-            mediationAdLoadCallback!!
-        )
-        forwarder.load(adUnit)
+        try {
+            Log.d(TAG,"Enter loadRewardedAd")
+            val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
+                MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
+            )
+            val forwarder = HuaweiCustomEventRewardedAdEventForwarder(
+                mediationRewardedAdConfiguration!!,
+                mediationAdLoadCallback!!
+            )
+            forwarder.load(adUnit)
+        }
+        catch ( exception: Throwable){
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "Request Rewarded Ad Failed: $stacktrace")
+        }
     }
+
+
 }

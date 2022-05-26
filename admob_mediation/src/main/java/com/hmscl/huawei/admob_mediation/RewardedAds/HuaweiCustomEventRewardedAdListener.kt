@@ -17,7 +17,6 @@
 package com.hmscl.huawei.admob_mediation.RewardedAds
 
 import android.util.Log
-import com.hmscl.huawei.admob_mediation.BannerAds.HuaweiCustomEventBannerEventForwarder
 import com.huawei.hms.ads.reward.RewardAdLoadListener
 
 open class HuaweiCustomEventRewardedAdListener : RewardAdLoadListener() {

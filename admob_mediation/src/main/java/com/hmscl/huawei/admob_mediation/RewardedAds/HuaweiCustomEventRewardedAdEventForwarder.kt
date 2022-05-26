@@ -33,6 +33,8 @@ import com.huawei.hms.ads.reward.Reward
 import com.huawei.hms.ads.reward.RewardAd
 import com.huawei.hms.ads.reward.RewardAdLoadListener
 import com.huawei.hms.ads.reward.RewardAdStatusListener
+import java.io.PrintWriter
+import java.io.StringWriter
 
 class HuaweiCustomEventRewardedAdEventForwarder(
     private val adConfiguration: MediationRewardedAdConfiguration,
@@ -69,9 +71,7 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                 Log.d(TAG, "HuaweiCustomEventRewardedAdEventForwarder =  onRewardedLoaded()")
                 rewardedAdCallback =
                     mediationAdLoadCallBack.onSuccess(this@HuaweiCustomEventRewardedAdEventForwarder)
-
             }
-
         }
 
         val adParam = AdParam.Builder()
@@ -86,8 +86,10 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
             else if (consentStatus == ConsentStatus.PERSONALIZED)
                 adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-        } catch (exception: java.lang.Exception) {
-            Log.i(this.toString(), "configureAdRequest: Consent status couldn't read")
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.w(TAG, "configureAdRequest: Consent status couldn't read: $stacktrace")
         }
 
         /**
@@ -98,14 +100,31 @@ class HuaweiCustomEventRewardedAdEventForwarder(
                 "SharedPreferences",
                 Context.MODE_PRIVATE
             )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
+            val tcfString = sharedPref?.getString("IABTCF_TCString", "")
 
             if (tcfString != null && tcfString != "") {
                 val requestOptions = HwAds.getRequestOptions()
                 requestOptions.toBuilder().setConsent(tcfString).build()
             }
-        } catch (exception: java.lang.Exception) {
-            Log.i(this.toString(), "configureAdRequest: TCFString couldn't read")
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "configureAdRequest: TCFString couldn't read: $stacktrace")
+        }
+
+        /**
+         * COPPA
+         */
+        try {
+            adParam.setTagForChildProtection(adConfiguration.taggedForChildDirectedTreatment())
+            Log.d(
+                TAG,
+                "TagforChildLog:" + adConfiguration.taggedForChildDirectedTreatment().toString()
+            )
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "configureAdRequest: TagForChildProtection couldn't read: $stacktrace")
         }
 
         rewardAd.loadAd(adParam.build(), listenerRewarded)
