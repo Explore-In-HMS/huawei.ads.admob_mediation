@@ -188,7 +188,7 @@ usesCleartextTraffic = "true"
 ## 1.2.13
 
 <ul>
-  <li>Google consent library dependency is set to optional<i>compileOnly</i>.</li>
+  <li>Google consent library dependency is set to optional.</li>
   <li>FullScreenContentCallback event call error is now fixed the event methods are now available.</li>
 </ul>
 
