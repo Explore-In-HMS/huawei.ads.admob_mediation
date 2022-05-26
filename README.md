@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h1>
 
-![Latest Version](https://img.shields.io/badge/latestVersion-1.2.12-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+![Latest Version](https://img.shields.io/badge/latestVersion-1.2.13-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
 
@@ -184,6 +184,13 @@ usesCleartextTraffic = "true"
 ```
 
 # Version Change History
+
+## 1.2.13
+
+<ul>
+  <li>Google consent library dependency is set to optional<i>compileOnly</i>.</li>
+  <li>FullScreenContentCallback event call error is now fixed the event methods are now available.</li>
+</ul>
 
 ## 1.2.12
 
