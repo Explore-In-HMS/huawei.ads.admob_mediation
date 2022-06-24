@@ -249,7 +249,7 @@ Firstly, integrate the Admob SDK for Android
 
 **Note** : 
 1) Developers can find app level build.gradle in their project from __**"app-folder/app/build.gradle"**__
-2) If you use the native ad you can submit a ticket [here](https://developer.huawei.com/consumer/en/support/feedback)
+2) If you use the native ad format in your application, please submit a ticket [here](https://developer.huawei.com/consumer/en/support/feedback) to get support from Huawei. 
 
 ### **Banner Ad**
 
