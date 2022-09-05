@@ -136,7 +136,10 @@ The HUAWEI Ads SDK (com.huawei.hms:ads) has integrated the required permissions.
 
 **android.permission.READ_CALENDAR:** Reads calendar events and their subscription statuses. (The permission can be removed if not necessary.) <br />
 
-**android.permission.WRITE_CALENDAR:** Creates a calendar event when a user clicks the subscription button in an ad. (The permission can be removed if not necessary.) <br />
+**android.permission.WRITE_CALENDAR:** Creates a calendar event when a user clicks the subscription button in an ad. (The permission can be removed if not necessary.) 
+
+**android.permission.QUERY_ALL_PACKAGES:** Gives visibility into the inventory of installed apps on a given device. (The permission can be removed if not necessary.)
+<br />
 
 ## **Configuring Obfuscation Scripts**
 Before building the APK, configure the obfuscation configuration file to prevent the HUAWEI Ads SDK () from being obfuscated.
