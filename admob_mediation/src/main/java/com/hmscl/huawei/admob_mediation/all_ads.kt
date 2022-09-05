@@ -18,7 +18,10 @@ package com.hmscl.huawei.admob_mediation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Display
+import android.view.WindowManager
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdRequest
@@ -82,14 +85,57 @@ class all_ads : Adapter(),
             }
 
             huaweiBannerView.adId = huaweiBannerAdId
-            huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
+            huaweiBannerView.bannerAdSize =
+                context?.let { getHuaweiBannerAdSizeFromAdmobAdSize(adSize = size) }
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
+
         } catch (e: Throwable) {
             val stacktrace =
                 StringWriter().also { e.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "Request Banner Ad Failed: $stacktrace")
             huaweiBannerView.adListener.onAdFailed(AdParam.ErrorCode.INNER)
         }
+    }
+
+    private fun getHuaweiBannerAdSizeFromAdmobAdSize(adSize: AdSize): BannerAdSize {
+
+        var resultAdSize: BannerAdSize
+
+        if (AdSize.SMART_BANNER.equals(adSize) || adSize.isFullWidth && adSize.isAutoHeight) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_SMART
+        } else if (AdSize.BANNER.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_320_50
+        } else if (AdSize.LARGE_BANNER.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_320_100
+        } else if (AdSize.MEDIUM_RECTANGLE.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_300_250
+        } else if (AdSize.FULL_BANNER.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_468_60
+        } else if (AdSize.LEADERBOARD.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_728_90
+        } else if (AdSize.WIDE_SKYSCRAPER.equals(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_160_600
+        } else if (isFullWidthRequest(adSize)) {
+            resultAdSize = BannerAdSize.BANNER_SIZE_ADVANCED
+        } else {
+            resultAdSize = BannerAdSize.getCurrentDirectionBannerSize(context, adSize.width)
+            if (resultAdSize == BannerAdSize.BANNER_SIZE_INVALID) {
+                resultAdSize = BannerAdSize(adSize.width, adSize.height)
+            }
+        }
+
+        return resultAdSize
+    }
+
+    private fun isFullWidthRequest(adSize: AdSize): Boolean {
+
+        val defaultDisplay: Display =
+            (context!!.getSystemService("window") as WindowManager).defaultDisplay
+        val displayMetrics = DisplayMetrics()
+        defaultDisplay.getMetrics(displayMetrics)
+
+        val screenWidth = (displayMetrics.widthPixels / displayMetrics.density).toInt()
+        return adSize.width == screenWidth
     }
 
     override fun requestInterstitialAd(
@@ -100,9 +146,9 @@ class all_ads : Adapter(),
         mediationExtras: Bundle?
     ) {
         try {
-            Log.d(TAG,"enter requestInterstitialAd")
-            if (serverParameters.isNullOrEmpty()){
-                Log.d(TAG,"Interstitial serverParameter is empty or null")
+            Log.d(TAG, "enter requestInterstitialAd")
+            if (serverParameters.isNullOrEmpty()) {
+                Log.d(TAG, "Interstitial serverParameter is empty or null")
             }
             this.context = context
             huaweiInterstitialView = InterstitialAd(context)
@@ -139,9 +185,9 @@ class all_ads : Adapter(),
     ) {
 
         try {
-            Log.d(TAG,"Enter requestNativeAd")
-            if (serverParameter.isNullOrEmpty()){
-                Log.d(TAG,"Native serverParameter is empty or null")
+            Log.d(TAG, "Enter requestNativeAd")
+            if (serverParameter.isNullOrEmpty()) {
+                Log.d(TAG, "Native serverParameter is empty or null")
             }
             this.context = context
             val options = mediationAdRequest.nativeAdOptions
@@ -246,7 +292,7 @@ class all_ads : Adapter(),
                 "SharedPreferences",
                 Context.MODE_PRIVATE
             )
-            val tcfString = sharedPref?.getString("IABTCF_TCString", "");
+            val tcfString = sharedPref?.getString("IABTCF_TCString", "")
 
             if (tcfString != null && tcfString != "") {
                 val requestOptions = HwAds.getRequestOptions()
@@ -314,7 +360,7 @@ class all_ads : Adapter(),
 
     override fun getSDKVersionInfo(): VersionInfo {
         //TODO Update version info for each release
-        return VersionInfo(3,4,54)
+        return VersionInfo(3, 4, 54)
     }
 
     override fun loadRewardedAd(
@@ -322,7 +368,7 @@ class all_ads : Adapter(),
         mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?
     ) {
         try {
-            Log.d(TAG,"Enter loadRewardedAd")
+            Log.d(TAG, "Enter loadRewardedAd")
             val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
                 MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
             )
@@ -331,13 +377,11 @@ class all_ads : Adapter(),
                 mediationAdLoadCallback!!
             )
             forwarder.load(adUnit)
-        }
-        catch ( exception: Throwable){
+        } catch (exception: Throwable) {
             val stacktrace =
                 StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "Request Rewarded Ad Failed: $stacktrace")
         }
+
     }
-
-
 }
