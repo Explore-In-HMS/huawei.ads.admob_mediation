@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h1>
 
-![Latest Version](https://img.shields.io/badge/latestVersion-1.2.13-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+![Latest Version](https://img.shields.io/badge/latestVersion-1.2.14-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
 
@@ -184,6 +184,14 @@ usesCleartextTraffic = "true"
 ```
 
 # Version Change History
+
+## 1.2.14
+
+<ul>
+  <li>New banner ad size supports are added </li>
+  <li>*Smart Banner</li>
+  <li>*Adaptive Banner</li>
+</ul>
 
 ## 1.2.13
 
