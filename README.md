@@ -1,11 +1,11 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.0-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.12-yellow) 
-<br> 
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.1-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.14-yellow)
+<br>
 ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
- 
+
 # Introduction
 
 In this documentation we explained how to use Huawei-Admob mediation with in the different platforms.
@@ -21,7 +21,7 @@ In this documentation we explained how to use Huawei-Admob mediation with in the
 | Cordova |✅|✅| ❌ | ❌ |
 
 # How to start?
-  
+
 ## Create an ad unit on Huawei Publisher Service
 
 1. Sign in to [Huawei Developer Console](https://developer.huawei.com/consumer/en/console) and create an AdUnit
@@ -106,7 +106,7 @@ dependencies {
     //If your app uses Google Admob SDK 20.6.0 and above versions, use :
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_above_20.6.0>'
     ...
-    
+
     //If your app uses Google Admob SDK 20.5.0 and below version, use :
     implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_below_20.5.0>'
 }
@@ -160,6 +160,11 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 </application>
 ```
 # Version Change History
+
+## 2.0.1
+
+New Smart Banner & Advanced Banner type support added.
+Oversized banner issue is fixed
 
 ## 2.0.0
 
@@ -220,7 +225,7 @@ If you want to integrate Ironsource network through Admob mediation follow these
 
 1. Add Admob for mediation at IronSource SDK Networks.
 2. Enter your App ID and Ad Unit ID from Admob.
-3. Add IronSource admob adapter and gms play services dependency to the project. 
+3. Add IronSource admob adapter and gms play services dependency to the project.
 
 ### **Scenario 1: If Publisher has IronSource mediation with Admob**
 If you have **IronSource mediation with Admob** you just need to integrate the Huawei admob mediation adapter and make the necessary changes we mentioned on the Admob panel. </br>[Follow here for the integration steps](#integrate-huawei-sdk)</br>
@@ -247,9 +252,9 @@ Firstly, integrate the Admob SDK for Android
 
 [Admob Android SDK](https://developers.google.com/admob/android/quick-start) can be used for all ad types.
 
-**Note** : 
+**Note** :
 1) Developers can find app level build.gradle in their project from __**"app-folder/app/build.gradle"**__
-2) If you use the native ad format in your application, please submit a ticket [here](https://developer.huawei.com/consumer/en/support/feedback) to get support from Huawei. 
+2) If you use the native ad format in your application, please submit a ticket [here](https://developer.huawei.com/consumer/en/support/feedback) to get support from Huawei.
 
 ### **Banner Ad**
 
@@ -280,7 +285,7 @@ Firstly, integrate the Admob Unity SDK to Unity.
 For more details on Admob Unity SDK visit [here](https://developers.google.com/admob/unity/quick-start)
 
 ### **Banner Ads**
-To use Banner ads in Unity , please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/banner) to get more information about Admob Unity SDKs Banner Ad development. 
+To use Banner ads in Unity , please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/banner) to get more information about Admob Unity SDKs Banner Ad development.
 
 ### **Interstitial Ads**
 To use Interstitial ads in Unity, please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/interstitial) to get more information about Admob Unity SDKs Interstitial Ad development.
@@ -288,7 +293,7 @@ To use Interstitial ads in Unity, please check the Admob Unity SDK. Click [here]
 ### **Rewarded Ads**
 To use Rewarded ads in Unity, please check the Admob Unity SDK. Click [here](https://developers.google.com/admob/unity/rewarded) to get more information about Admob Unity SDKs Banner Ad development.
 
-#### **Step 1:** 
+#### **Step 1:**
 Make sure to switch to the Android Platform from **Build Settings -> Android -> Switch Platform**
 #### **Step 2:**
 **Edit -> Project Settings ->  Player -> Other Settings**<br>
@@ -309,7 +314,7 @@ android.enableJetifier=true
 
 **After these configurations is completed you can display Huawei Ads.**
 
-**Note:** 
+**Note:**
 In case of any error on aaptOptions you can add the following line to aaptOptions in **launcherTemplate.gradle** which you override it by enabiling it from **Edit -> Project Settings ->  Player -> Publishing Settings**
 
 ```groovy
@@ -367,8 +372,8 @@ AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
 
 ```jsx
 <NativeAdView
-adUnitID= {NativeAdId} 
-onAdFailedToLoad={error => console.error(error)} /> 
+adUnitID= {NativeAdId}
+onAdFailedToLoad={error => console.error(error)} />
 ```
 
 ## Flutter
