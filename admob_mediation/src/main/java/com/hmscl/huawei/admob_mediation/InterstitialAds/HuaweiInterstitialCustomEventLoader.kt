@@ -76,7 +76,7 @@ class HuaweiInterstitialCustomEventLoader(
             override fun onAdFailed(errorCode: Int) {
                 Log.e(
                     TAG,
-                    "InterstitialEventLoader - loadAd() - onAdFailed() - Failed to load Huawei banner with code: ${errorCode}."
+                    "InterstitialEventLoader - loadAd() - onAdFailed() - Failed to load Huawei Interstitial with code: ${errorCode}."
                 )
                 val adError = AdError(
                     errorCode, "AdFailed",

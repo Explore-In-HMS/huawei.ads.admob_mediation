@@ -66,11 +66,7 @@ class HuaweiRewardedCustomEventLoader(
             mediationRewardedAdConfiguration.serverParameters.getString("parameter")
         if (TextUtils.isEmpty(serverParameter)) {
             mediationRewardedAdLoadCallback.onFailure(
-                AdError(
-                    CustomEventError.ERROR_NO_AD_UNIT_ID,
-                    "Ad unit id is empty",
-                    CustomEventError.CUSTOM_EVENT_ERROR_DOMAIN
-                )
+                CustomEventError.createCustomEventNoAdIdError()
             )
             return
         }

@@ -79,7 +79,7 @@ class HuaweiUnifiedNativeAdMapper(
         huaweiNativeAd.recordImpressionEvent(extras)
     }
 
-    override fun handleClick(view: View?) {
+    override fun handleClick(p0: View) {
         // recordClickEvent will be called automatically when triggerClick called.
         Log.d(TAG, "HuaweiCustomEventNativeAdsMapper - handleClick()")
         huaweiNativeAd.triggerClick(extras)

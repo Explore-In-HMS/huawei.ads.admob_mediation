@@ -95,33 +95,6 @@ class HuaweiNativeCustomEventLoader(
                 "adConfiguration" + options.videoOptions?.customControlsRequested.toString() + options.videoOptions?.startMuted.toString()
             )
 
-            Log.d(TAG, "Native serverParameter $serverParameter")
-
-            val adListener = object : AdListener() {
-
-
-                override fun onAdLeave() {
-                    super.onAdLeave()
-                }
-
-                override fun onAdOpened() {
-                    super.onAdOpened()
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                }
-
-                override fun onAdClicked() {
-                    super.onAdClicked()
-                }
-
-                override fun onAdImpression() {
-                    super.onAdImpression()
-                }
-
-            }
-
             val builder = NativeAdLoader.Builder(context, serverParameter)
             val nativeAdLoader = builder.build()
             builder.setNativeAdOptions(adConfiguration)
