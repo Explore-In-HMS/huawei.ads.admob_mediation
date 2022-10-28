@@ -50,13 +50,22 @@ class HuaweiInterstitialCustomEventLoader(
     /** Loads the interstitial ad from the third party ad network.  */
     fun loadAd() {
         Log.d(TAG, "InterstitialEventLoader - loadAd()")
+        if(context == null){
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoActivityContextError()
+            )
+            return
+        }
         context = mediationInterstitialAdConfiguration.context
+
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
         val serverParameter =
             mediationInterstitialAdConfiguration.serverParameters.getString("parameter")
-        if (TextUtils.isEmpty(serverParameter)) {
-            mediationAdLoadCallback.onFailure(CustomEventError.createCustomEventNoAdIdError())
+        if (serverParameter.isNullOrBlank()) {
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoAdIdError()
+            )
             return
         }
         huaweiInterstitialView = InterstitialAd(context)
@@ -76,7 +85,7 @@ class HuaweiInterstitialCustomEventLoader(
             override fun onAdFailed(errorCode: Int) {
                 Log.e(
                     TAG,
-                    "InterstitialEventLoader - loadAd() - onAdFailed() - Failed to load Huawei banner with code: ${errorCode}."
+                    "InterstitialEventLoader - loadAd() - onAdFailed() - Failed to load Huawei Interstitial with code: ${errorCode}."
                 )
                 val adError = AdError(
                     errorCode, "AdFailed",

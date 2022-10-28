@@ -16,12 +16,16 @@
 
 package com.hmscl.huawei.admob_mediation.BannerAds
 
+import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
+import androidx.core.view.doOnPreDraw
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
 import com.google.android.gms.ads.mediation.MediationBannerAd
 import com.google.android.gms.ads.mediation.MediationBannerAdCallback
@@ -50,19 +54,30 @@ class HuaweiBannerCustomEventLoader(
 
     /** Loads a banner ad from Huawei Ads network.  */
     fun loadAd() {
+
         Log.d(TAG, "BannerEventLoader - loadAd()")
+        val isUnityApp: Boolean = try {
+            Class.forName("com.unity3d.player.UnityPlayerActivity")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+
+        if(context == null){
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoActivityContextError()
+            )
+            return
+        }
+        this.context = mediationBannerAdConfiguration.context
+
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
-        this.context = mediationBannerAdConfiguration.context
-        val serverParameter: String =
-            mediationBannerAdConfiguration.serverParameters.getString("parameter").toString()
-        if (TextUtils.isEmpty(serverParameter)) {
+        val serverParameter =
+            mediationBannerAdConfiguration.serverParameters.getString("parameter")
+        if (serverParameter.isNullOrBlank()) {
             mediationAdLoadCallback.onFailure(
-                AdError(
-                    CustomEventError.ERROR_NO_AD_UNIT_ID,
-                    "Ad unit id is empty",
-                    CustomEventError.CUSTOM_EVENT_ERROR_DOMAIN
-                )
+                CustomEventError.createCustomEventNoAdIdError()
             )
             return
         }
@@ -71,24 +86,64 @@ class HuaweiBannerCustomEventLoader(
 
         // Assumes that the serverParameter is the AdUnitId for Huawei Ads network.
         huaweiBannerView.adId = serverParameter
-        val size = mediationBannerAdConfiguration.adSize
-        //huaweiBannerView.bannerAdSize = BannerAdSize(size.width, size.height)
 
-        // Internally, smart banners use constants to represent their ad size, which means a call to
-        // AdSize.getHeight could return a negative value. Below code used for adjusting to match
-        // the device's display metrics.
-        val widthInPixels = size.getWidthInPixels(context)
-        val heightInPixels = size.getHeightInPixels(context)
-        val displayMetrics = Resources.getSystem().displayMetrics
-        val widthInDp = Math.round(widthInPixels / displayMetrics.density)
-        val heightInDp = Math.round(heightInPixels / displayMetrics.density)
-        huaweiBannerView.bannerAdSize = BannerAdSize(widthInDp, heightInDp)
+        val bannerAdSize = getHuaweiBannerAdSizeFromAdmobAdSize(
+            mediationBannerAdConfiguration.adSize
+        )
+        huaweiBannerView.bannerAdSize = bannerAdSize
+
+        if (isUnityApp) {
+            (context as Activity).runOnUiThread {
+                huaweiBannerView.visibility = View.INVISIBLE
+            }
+            huaweiBannerView.doOnPreDraw {
+                Log.d(
+                    TAG,
+                    "BannerEventLoader - loadAd() - doOnPreDraw - Optimizing banner ad rendering for unity environment"
+                )
+                context.runOnUiThread {
+                    if (bannerAdSize.width > 0) {
+                        val displayMetrics = Resources.getSystem().displayMetrics
+                        huaweiBannerView.layoutParams = FrameLayout.LayoutParams(
+                            (bannerAdSize.width * displayMetrics.density).toInt(),
+                            (bannerAdSize.height * displayMetrics.density).toInt()
+                        )
+                    } else {
+                        if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            val displayMetrics = Resources.getSystem().displayMetrics
+                            val bannerWidth = displayMetrics.heightPixels
+                            val bannerHeight = displayMetrics.widthPixels
+
+                            val calculatedCoeff = if (bannerHeight >= bannerWidth) {
+                                bannerHeight.toFloat() / bannerWidth
+                            } else {
+                                bannerWidth.toFloat() / bannerHeight
+                            }
+                            huaweiBannerView.layoutParams = FrameLayout.LayoutParams(
+                                (it.width / calculatedCoeff).toInt(),
+                                (it.height / calculatedCoeff).toInt()
+                            )
+                            Log.d(
+                                TAG,
+                                "BannerEventLoader - loadAd() - doOnPreDraw() - Calculated Coefficient:$calculatedCoeff, New width ${(it.width / calculatedCoeff).toInt()}, New Height: ${(it.height / calculatedCoeff).toInt()}"
+                            )
+
+                        } else {
+                            huaweiBannerView.layoutParams =
+                                FrameLayout.LayoutParams(it.width, it.height)
+                        }
+                    }
+                    huaweiBannerView.visibility = View.VISIBLE
+                }
+            }
+        }
+
+
         val adListener: AdListener = object : AdListener() {
             override fun onAdLoaded() {
                 Log.d(TAG, "BannerEventLoader - loadAd() - onAdLoaded() - Ad loaded successfully")
                 bannerAdCallback =
                     mediationAdLoadCallback.onSuccess(this@HuaweiBannerCustomEventLoader)
-
             }
 
             override fun onAdFailed(errorCode: Int) {
@@ -126,6 +181,87 @@ class HuaweiBannerCustomEventLoader(
         huaweiBannerView.adListener = adListener
         huaweiBannerView.loadAd(mediationBannerAdConfiguration.configureAdRequest())
 
+    }
+
+    private fun getHuaweiBannerAdSizeFromAdmobAdSize(adSize: AdSize): BannerAdSize {
+
+        var resultAdSize: BannerAdSize
+        Log.d(
+            TAG,
+            "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize"
+        )
+
+        if (adSize.isFullWidth && adSize.isAutoHeight) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_SMART"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_SMART
+        } else if (AdSize.BANNER == adSize || adSize == AdSize(320, 50)) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_320_50"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_320_50
+        } else if (AdSize.LARGE_BANNER == adSize) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_320_100"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_320_100
+        } else if (AdSize.MEDIUM_RECTANGLE == adSize) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_300_250"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_300_250
+        } else if (AdSize.FULL_BANNER == adSize) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_468_60"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_468_60
+        } else if (AdSize.LEADERBOARD == adSize) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_728_90"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_728_90
+        } else if (AdSize.WIDE_SKYSCRAPER == adSize) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_160_600"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_160_600
+        } else if (isFullWidthRequest(adSize)) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_ADVANCED"
+            )
+            resultAdSize = BannerAdSize.BANNER_SIZE_ADVANCED
+        } else {
+            Log.d(
+                TAG,
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : CustomAdvancedBannerSize"
+            )
+            resultAdSize = BannerAdSize.getCurrentDirectionBannerSize(context, adSize.width)
+            if (resultAdSize == BannerAdSize.BANNER_SIZE_INVALID) {
+                Log.d(
+                    TAG,
+                    "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_INVALID, Accepting custom banner ad size, New Banner size - Width:${adSize.width}, Height:${adSize.height}"
+                )
+                resultAdSize = BannerAdSize(adSize.width, adSize.height)
+            }
+        }
+
+        return resultAdSize
+    }
+
+    private fun isFullWidthRequest(adSize: AdSize): Boolean {
+        val displayMetrics = Resources.getSystem().displayMetrics
+
+        val screenWidth = (displayMetrics.widthPixels / displayMetrics.density).toInt()
+        return adSize.width == screenWidth
     }
 
     override fun getView(): View {

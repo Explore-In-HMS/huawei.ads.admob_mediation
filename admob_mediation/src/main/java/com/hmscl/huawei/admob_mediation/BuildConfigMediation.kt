@@ -23,6 +23,6 @@ object BuildConfigMediation {
 
     //TODO Will be updated with each version update
     //Field from default config.
-    const val ADAPTER_VERSION = "2.0.0"
-    const val ADS_SDK_VERSION = "3.4.54.300"
+    const val ADAPTER_VERSION = "2.0.1"
+    const val ADS_SDK_VERSION = "13.4.56.302"
 }

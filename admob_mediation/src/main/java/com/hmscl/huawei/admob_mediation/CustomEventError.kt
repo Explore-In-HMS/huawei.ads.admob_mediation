@@ -46,7 +46,7 @@ object CustomEventError {
     fun createCustomEventNoActivityContextError(): AdError {
         return AdError(
             ERROR_NO_ACTIVITY_CONTEXT,
-            "An activity context is required to show the sample ad",
+            "Context is null, an activity context is required to show the ad",
             CUSTOM_EVENT_ERROR_DOMAIN
         )
     }

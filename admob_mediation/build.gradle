@@ -57,7 +57,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    compileOnly("com.huawei.hms:ads:3.4.54.300")
-    compileOnly("com.google.android.gms:play-services-ads:20.6.0")
+    compileOnly("com.huawei.hms:ads-lite:13.4.56.302")
+    compileOnly("com.google.android.gms:play-services-ads:21.3.0")
     compileOnly("com.google.android.ads.consent:consent-library:1.0.8")
 }

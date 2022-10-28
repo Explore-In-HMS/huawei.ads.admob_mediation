@@ -21,8 +21,6 @@ import android.util.Log
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.mediation.MediationAdConfiguration
-import com.google.gson.Gson
-import com.hmscl.huawei.admob_mediation.model.ContentBundle
 import com.huawei.hms.ads.AdParam
 import com.huawei.hms.ads.HwAds
 import com.huawei.hms.ads.NonPersonalizedAd
@@ -31,27 +29,6 @@ fun MediationAdConfiguration.configureAdRequest(): AdParam {
     val tag = "MediationAdConf"
     Log.d(tag, "ExtensionFunctions - configureAdRequest()")
     val adParam = AdParam.Builder()
-
-    val bundle = this.mediationExtras
-    val contentBundle = ContentBundle()
-
-    bundle.keySet()?.forEach { key ->
-        val keyValue = bundle.get(key).toString()
-        when (key) {
-            "channelCategoryCode" -> contentBundle.channelCategoryCode = keyValue
-            "title" -> contentBundle.title = keyValue
-            "tags" -> contentBundle.tags = keyValue
-            "relatedPeople" -> contentBundle.relatedPeople = keyValue
-            "content" -> contentBundle.content = keyValue
-            "contentID" -> contentBundle.contentID = keyValue
-            "category" -> contentBundle.category = keyValue
-            "subcategory" -> contentBundle.subcategory = keyValue
-            "thirdCategory" -> contentBundle.thirdCategory = keyValue
-        }
-        Log.d("MediationKeywordsLog", key.toString())
-    }
-
-    adParam.setContentBundle(Gson().toJson(contentBundle))
 
     /**
      * NPA-PA
@@ -63,7 +40,7 @@ fun MediationAdConfiguration.configureAdRequest(): AdParam {
             adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_NON_PERSONALIZED)
         else if (consentStatus == ConsentStatus.PERSONALIZED)
             adParam.setNonPersonalizedAd(NonPersonalizedAd.ALLOW_ALL)
-    } catch (exception: java.lang.Exception) {
+    } catch (exception: Throwable) {
         Log.i(tag, "configureAdRequest: Consent status couldn't read")
     }
 
@@ -81,7 +58,7 @@ fun MediationAdConfiguration.configureAdRequest(): AdParam {
             val requestOptions = HwAds.getRequestOptions()
             requestOptions.toBuilder().setConsent(tcfString).build()
         }
-    } catch (exception: java.lang.Exception) {
+    } catch (exception: Throwable) {
         Log.i(tag, "configureAdRequest: TCFString couldn't read")
     }
 
