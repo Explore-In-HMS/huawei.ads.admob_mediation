@@ -41,7 +41,7 @@ class HuaweiRewardedCustomEventLoader(
      * A [MediationAdLoadCallback] that handles any callback when a Sample rewarded ad finishes
      * loading.
      */
-    private val mediationRewardedAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>
+    private val mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>
 ) : MediationRewardedAd {
     private var context: Context? = null
     private val TAG by lazy { HuaweiRewardedCustomEventLoader::class.java.simpleName }
@@ -59,13 +59,20 @@ class HuaweiRewardedCustomEventLoader(
     /** Loads the rewarded ad from Huawei Ads network.  */
     fun loadAd() {
         Log.d(TAG, "RewardedEventLoader - loadAd()")
+        if(context == null){
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoActivityContextError()
+            )
+            return
+        }
         this.context = mediationRewardedAdConfiguration.context
+
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
         val serverParameter =
             mediationRewardedAdConfiguration.serverParameters.getString("parameter")
-        if (TextUtils.isEmpty(serverParameter)) {
-            mediationRewardedAdLoadCallback.onFailure(
+        if (serverParameter.isNullOrBlank()) {
+            mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoAdIdError()
             )
             return
@@ -98,7 +105,7 @@ class HuaweiRewardedCustomEventLoader(
                     TAG,
                     "RewardedEventLoader - loadAd() - onRewardAdFailedToLoad() - Failed to load Huawei rewarded with code: ${p0}."
                 )
-                mediationRewardedAdLoadCallback.onFailure(
+                mediationAdLoadCallback.onFailure(
                     CustomEventError.createSampleSdkError(
                         ErrorCode.UNKNOWN
                     )
@@ -113,7 +120,7 @@ class HuaweiRewardedCustomEventLoader(
             override fun onRewardAdLoaded() {
                 Log.d(TAG, "RewardedEventLoader - loadAd() - onRewardAdLoaded()")
                 rewardedAdCallback =
-                    mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
+                    mediationAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
             }
 
             override fun onRewardAdOpened() {
@@ -141,7 +148,7 @@ class HuaweiRewardedCustomEventLoader(
                     TAG,
                     "RewardedEventLoader - loadAd() - onRewardAdFailedToLoad() = $p0"
                 )
-                mediationRewardedAdLoadCallback.onFailure(AdError(p0, "Rewarded Ads", "onFailure"))
+                mediationAdLoadCallback.onFailure(AdError(p0, "Rewarded Ads", "onFailure"))
             }
 
             override fun onRewardedLoaded() {
@@ -151,7 +158,7 @@ class HuaweiRewardedCustomEventLoader(
                     "RewardedEventLoader - loadAd() - onRewardedLoaded() - Ad loaded successfully"
                 )
                 rewardedAdCallback =
-                    mediationRewardedAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
+                    mediationAdLoadCallback.onSuccess(this@HuaweiRewardedCustomEventLoader)
             }
         }
         sampleRewardedAd.loadAd(

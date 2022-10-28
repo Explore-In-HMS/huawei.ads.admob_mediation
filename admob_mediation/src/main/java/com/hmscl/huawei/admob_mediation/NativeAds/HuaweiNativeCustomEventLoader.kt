@@ -54,12 +54,24 @@ class HuaweiNativeCustomEventLoader(
     /** Loads the native ad from Huawei Ads network.  */
     fun loadAd() {
         Log.d(TAG, "NativeEventLoader - loadAd()")
+        if(context == null){
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoActivityContextError()
+            )
+            return
+        }
         this.context = mediationNativeAdConfiguration.context
-        val serverParameter =
-            mediationNativeAdConfiguration.serverParameters.getString("parameter").toString()
 
-        if (serverParameter.isEmpty()) {
+        // All custom events have a server parameter named "parameter" that returns back the parameter
+        // entered into the AdMob UI when defining the custom event.
+        val serverParameter =
+            mediationNativeAdConfiguration.serverParameters.getString("parameter")
+
+        if (serverParameter.isNullOrBlank()) {
             Log.e(TAG, "Native serverParameter is empty or null")
+            mediationAdLoadCallback.onFailure(
+                CustomEventError.createCustomEventNoAdIdError()
+            )
         }
         try {
             val options = mediationNativeAdConfiguration.nativeAdOptions
