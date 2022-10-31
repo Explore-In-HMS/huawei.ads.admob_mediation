@@ -54,13 +54,19 @@ class HuaweiNativeCustomEventLoader(
     /** Loads the native ad from Huawei Ads network.  */
     fun loadAd() {
         Log.d(TAG, "NativeEventLoader - loadAd()")
+
+        this.context = mediationNativeAdConfiguration.context
         if(context == null){
+            Log.d(
+                TAG,
+                "BannerEventLoader - loadAd() - Context is null, an activity context is required to show the ad"
+            )
             mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoActivityContextError()
             )
             return
         }
-        this.context = mediationNativeAdConfiguration.context
+
 
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.

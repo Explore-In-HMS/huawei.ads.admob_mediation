@@ -63,19 +63,24 @@ class HuaweiBannerCustomEventLoader(
             false
         }
 
+        this.context = mediationBannerAdConfiguration.context
         if(context == null){
             mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoActivityContextError()
             )
             return
         }
-        this.context = mediationBannerAdConfiguration.context
+
 
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
         val serverParameter =
             mediationBannerAdConfiguration.serverParameters.getString("parameter")
         if (serverParameter.isNullOrBlank()) {
+            Log.d(
+                TAG,
+                "BannerEventLoader - loadAd() - Context is null, an activity context is required to show the ad"
+            )
             mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoAdIdError()
             )
@@ -186,69 +191,65 @@ class HuaweiBannerCustomEventLoader(
     private fun getHuaweiBannerAdSizeFromAdmobAdSize(adSize: AdSize): BannerAdSize {
 
         var resultAdSize: BannerAdSize
-        Log.d(
-            TAG,
-            "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize"
-        )
 
         if (adSize.isFullWidth && adSize.isAutoHeight) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_SMART"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_SMART"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_SMART
         } else if (AdSize.BANNER == adSize || adSize == AdSize(320, 50)) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_320_50"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_320_50"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_320_50
         } else if (AdSize.LARGE_BANNER == adSize) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_320_100"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_320_100"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_320_100
         } else if (AdSize.MEDIUM_RECTANGLE == adSize) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_300_250"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_300_250"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_300_250
         } else if (AdSize.FULL_BANNER == adSize) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_468_60"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_468_60"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_468_60
         } else if (AdSize.LEADERBOARD == adSize) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_728_90"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_728_90"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_728_90
         } else if (AdSize.WIDE_SKYSCRAPER == adSize) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_160_600"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_160_600"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_160_600
         } else if (isFullWidthRequest(adSize)) {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_ADVANCED"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_ADVANCED"
             )
             resultAdSize = BannerAdSize.BANNER_SIZE_ADVANCED
         } else {
             Log.d(
                 TAG,
-                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : CustomAdvancedBannerSize"
+                "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : CustomAdvancedBannerSize"
             )
             resultAdSize = BannerAdSize.getCurrentDirectionBannerSize(context, adSize.width)
             if (resultAdSize == BannerAdSize.BANNER_SIZE_INVALID) {
                 Log.d(
                     TAG,
-                    "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Calculated huawei banner size : BANNER_SIZE_INVALID, Accepting custom banner ad size, New Banner size - Width:${adSize.width}, Height:${adSize.height}"
+                    "BannerEventLoader - getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_INVALID, Accepting custom banner ad size, New Banner size - Width:${adSize.width}, Height:${adSize.height}"
                 )
                 resultAdSize = BannerAdSize(adSize.width, adSize.height)
             }

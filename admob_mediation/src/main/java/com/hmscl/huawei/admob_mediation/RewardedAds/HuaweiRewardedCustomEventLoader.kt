@@ -18,7 +18,6 @@ package com.hmscl.huawei.admob_mediation.RewardedAds
 
 import android.app.Activity
 import android.content.Context
-import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.mediation.MediationAdLoadCallback
@@ -36,7 +35,7 @@ import com.huawei.hms.ads.reward.RewardAdLoadListener
 /** Rewarded custom event loader for the Huawei Ads SDK.  */
 class HuaweiRewardedCustomEventLoader(
     /** Configuration for requesting the rewarded ad from the third party network.  */
-    private val mediationRewardedAdConfiguration: MediationRewardedAdConfiguration,
+    private val mediationdAdConfiguration: MediationRewardedAdConfiguration,
     /**
      * A [MediationAdLoadCallback] that handles any callback when a Sample rewarded ad finishes
      * loading.
@@ -59,18 +58,23 @@ class HuaweiRewardedCustomEventLoader(
     /** Loads the rewarded ad from Huawei Ads network.  */
     fun loadAd() {
         Log.d(TAG, "RewardedEventLoader - loadAd()")
+
+        this.context = mediationdAdConfiguration.context
         if(context == null){
+            Log.d(
+                TAG,
+                "BannerEventLoader - loadAd() - Context is null, an activity context is required to show the ad"
+            )
             mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoActivityContextError()
             )
             return
         }
-        this.context = mediationRewardedAdConfiguration.context
 
         // All custom events have a server parameter named "parameter" that returns back the parameter
         // entered into the AdMob UI when defining the custom event.
         val serverParameter =
-            mediationRewardedAdConfiguration.serverParameters.getString("parameter")
+            mediationdAdConfiguration.serverParameters.getString("parameter")
         if (serverParameter.isNullOrBlank()) {
             mediationAdLoadCallback.onFailure(
                 CustomEventError.createCustomEventNoAdIdError()
@@ -162,7 +166,7 @@ class HuaweiRewardedCustomEventLoader(
             }
         }
         sampleRewardedAd.loadAd(
-            mediationRewardedAdConfiguration.configureAdRequest(),
+            mediationdAdConfiguration.configureAdRequest(),
             listenerRewarded
         )
     }
