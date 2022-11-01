@@ -28,7 +28,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 2
-        versionName "2.0.0"
+        versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -61,4 +61,18 @@ dependencies {
     compileOnly("com.huawei.hms:ads-lite:13.4.56.302")
     compileOnly("com.google.android.gms:play-services-ads:21.3.0")
     compileOnly("com.google.android.ads.consent:consent-library:1.0.8")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.Explore-In-HMS'
+                artifactId = 'huawei.ads.admob_mediation'
+                version = '2.0.2-beta'
+            }
+        }
+    }
 }
