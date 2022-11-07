@@ -1,6 +1,6 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h3>
 
- ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.1-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.14-yellow)
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.2-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.14-yellow)
 <br>
 ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
@@ -161,7 +161,7 @@ To allow HTTP and HTTPS network requests on devices with targetSdkVersion 28 or 
 ```
 # Version Change History
 
-## 2.0.1
+## 2.0.2
 
 New Smart Banner & Advanced Banner type support added.
 Oversized banner issue is fixed
