@@ -17,19 +17,18 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    //id 'maven-publish'
 }
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.umitkose1'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.2.15"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -63,4 +62,19 @@ dependencies {
     compileOnly("com.huawei.hms:ads:3.4.54.300")
     compileOnly("com.google.android.gms:play-services-ads:19.5.0")
     compileOnly("com.google.android.ads.consent:consent-library:1.0.8")
+
 }
+
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            release(MavenPublication) {
+//                from components.release
+//
+//                groupId = 'com.github.Explore-In-HMS'
+//                artifactId = 'huawei.ads.admob_mediation'
+//                version = '1.2.15'
+//            }
+//        }
+//    }
+//}
