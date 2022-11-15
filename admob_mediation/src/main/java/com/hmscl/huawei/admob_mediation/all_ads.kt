@@ -16,12 +16,15 @@
 
 package com.hmscl.huawei.admob_mediation
 
+import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Display
-import android.view.WindowManager
+import android.view.View
+import android.widget.FrameLayout
+import androidx.core.view.doOnPreDraw
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.android.gms.ads.AdRequest
@@ -40,6 +43,7 @@ import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.util.*
 
 
 class all_ads : Adapter(),
@@ -55,8 +59,6 @@ class all_ads : Adapter(),
     private lateinit var nativeAdLoader: NativeAdLoader
     private var huaweiNativeAdId = "testu7m3hc4gvm"
 
-    private var huaweiRewardedAdId = "testx9dtjwj8hp"
-
     private var context: Context? = null
 
     private var mInitializationCompleteCallback: InitializationCompleteCallback? = null
@@ -71,22 +73,84 @@ class all_ads : Adapter(),
         mediationExtras: Bundle?
     ) {
         try {
-            Log.d(TAG, "enter requestBannerAd")
-            if (serverParameters.isNullOrEmpty()) {
-                Log.d(TAG, "Banner serverParameter is empty or null")
+            Log.d(TAG, "requestBannerAd")
+
+            val isUnityApp: Boolean = try {
+                Class.forName("com.unity3d.player.UnityPlayerActivity")
+                true
+            } catch (e: ClassNotFoundException) {
+                false
             }
-            this.context = context
+
+            if (context == null) {
+                Log.e(TAG, "Context is null, an activity context is required to show the ad")
+                return
+            }
             huaweiBannerView = BannerView(context)
-            val eventForwarder = HuaweiCustomEventBannerEventForwarder(listener, huaweiBannerView)
-            huaweiBannerView.adListener = eventForwarder
-            if (serverParameters != null) {
+
+            if (serverParameters.isNullOrEmpty()) {
+                Log.e(TAG, "Banner serverParameter is empty or null")
+
+            }
+            else {
                 huaweiBannerAdId = serverParameters
                 Log.d(TAG, "Banner serverParameter $serverParameters")
             }
 
+            val eventForwarder = HuaweiCustomEventBannerEventForwarder(listener, huaweiBannerView)
+            huaweiBannerView.adListener = eventForwarder
+
             huaweiBannerView.adId = huaweiBannerAdId
-            huaweiBannerView.bannerAdSize =
-                context?.let { getHuaweiBannerAdSizeFromAdmobAdSize(adSize = size) }
+
+            val bannerAdSize = getHuaweiBannerAdSizeFromAdmobAdSize(size)
+            huaweiBannerView.bannerAdSize = bannerAdSize
+
+            if (isUnityApp) {
+                (context as Activity).runOnUiThread {
+                    huaweiBannerView.visibility = View.INVISIBLE
+                }
+                huaweiBannerView.doOnPreDraw {
+                    Log.d(
+                        TAG,
+                        "BannerEventLoader - loadAd() - doOnPreDraw - Optimizing banner ad rendering for unity environment"
+                    )
+                    context.runOnUiThread {
+                        if (bannerAdSize.width > 0) {
+                            val displayMetrics = Resources.getSystem().displayMetrics
+                            huaweiBannerView.layoutParams = FrameLayout.LayoutParams(
+                                (bannerAdSize.width * displayMetrics.density).toInt(),
+                                (bannerAdSize.height * displayMetrics.density).toInt()
+                            )
+                        } else {
+                            if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                val displayMetrics = Resources.getSystem().displayMetrics
+                                val bannerWidth = displayMetrics.heightPixels
+                                val bannerHeight = displayMetrics.widthPixels
+
+                                val calculatedCoeff = if (bannerHeight >= bannerWidth) {
+                                    bannerHeight.toFloat() / bannerWidth
+                                } else {
+                                    bannerWidth.toFloat() / bannerHeight
+                                }
+                                huaweiBannerView.layoutParams = FrameLayout.LayoutParams(
+                                    (it.width / calculatedCoeff).toInt(),
+                                    (it.height / calculatedCoeff).toInt()
+                                )
+                                Log.d(
+                                    TAG,
+                                    "BannerEventLoader - loadAd() - doOnPreDraw() - Calculated Coefficient:$calculatedCoeff, New width ${(it.width / calculatedCoeff).toInt()}, New Height: ${(it.height / calculatedCoeff).toInt()}"
+                                )
+
+                            } else {
+                                huaweiBannerView.layoutParams =
+                                    FrameLayout.LayoutParams(it.width, it.height)
+                            }
+                        }
+                        huaweiBannerView.visibility = View.VISIBLE
+                    }
+                }
+            }
+
             huaweiBannerView.loadAd(configureAdRequest(mediationAdRequest))
 
         } catch (e: Throwable) {
@@ -101,25 +165,65 @@ class all_ads : Adapter(),
 
         var resultAdSize: BannerAdSize
 
-        if (AdSize.SMART_BANNER.equals(adSize) || adSize.isFullWidth && adSize.isAutoHeight) {
+        if (adSize.isFullWidth && adSize.isAutoHeight) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_SMART"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_SMART
-        } else if (AdSize.BANNER.equals(adSize)) {
+        } else if (AdSize.BANNER == adSize || adSize == AdSize(320, 50)) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_320_50"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_320_50
-        } else if (AdSize.LARGE_BANNER.equals(adSize)) {
+        } else if (AdSize.LARGE_BANNER == adSize) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_320_100"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_320_100
-        } else if (AdSize.MEDIUM_RECTANGLE.equals(adSize)) {
+        } else if (AdSize.MEDIUM_RECTANGLE == adSize) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_300_250"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_300_250
-        } else if (AdSize.FULL_BANNER.equals(adSize)) {
+        } else if (AdSize.FULL_BANNER == adSize) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_468_60"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_468_60
-        } else if (AdSize.LEADERBOARD.equals(adSize)) {
+        } else if (AdSize.LEADERBOARD == adSize) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_728_90"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_728_90
-        } else if (AdSize.WIDE_SKYSCRAPER.equals(adSize)) {
+        } else if (AdSize.WIDE_SKYSCRAPER == adSize) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_160_600"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_160_600
         } else if (isFullWidthRequest(adSize)) {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_ADVANCED"
+            )
             resultAdSize = BannerAdSize.BANNER_SIZE_ADVANCED
         } else {
+            Log.d(
+                TAG,
+                "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : CustomAdvancedBannerSize"
+            )
             resultAdSize = BannerAdSize.getCurrentDirectionBannerSize(context, adSize.width)
             if (resultAdSize == BannerAdSize.BANNER_SIZE_INVALID) {
+                Log.d(
+                    TAG,
+                    "getHuaweiBannerAdSizeFromAdmobAdSize() - Received ad size: $adSize, Calculated huawei banner size : BANNER_SIZE_INVALID, Accepting custom banner ad size, New Banner size - Width:${adSize.width}, Height:${adSize.height}"
+                )
                 resultAdSize = BannerAdSize(adSize.width, adSize.height)
             }
         }
@@ -128,11 +232,7 @@ class all_ads : Adapter(),
     }
 
     private fun isFullWidthRequest(adSize: AdSize): Boolean {
-
-        val defaultDisplay: Display =
-            (context!!.getSystemService("window") as WindowManager).defaultDisplay
-        val displayMetrics = DisplayMetrics()
-        defaultDisplay.getMetrics(displayMetrics)
+        val displayMetrics = Resources.getSystem().displayMetrics
 
         val screenWidth = (displayMetrics.widthPixels / displayMetrics.density).toInt()
         return adSize.width == screenWidth
@@ -174,6 +274,28 @@ class all_ads : Adapter(),
         if (huaweiInterstitialView.isLoaded) {
             huaweiInterstitialView.show()
         }
+    }
+
+    override fun loadRewardedAd(
+        mediationRewardedAdConfiguration: MediationRewardedAdConfiguration?,
+        mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?
+    ) {
+        try {
+            Log.d(TAG, "Enter loadRewardedAd")
+            val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
+                MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
+            )
+            val forwarder = HuaweiCustomEventRewardedAdEventForwarder(
+                mediationRewardedAdConfiguration!!,
+                mediationAdLoadCallback!!
+            )
+            forwarder.load(adUnit)
+        } catch (exception: Throwable) {
+            val stacktrace =
+                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
+            Log.e(TAG, "Request Rewarded Ad Failed: $stacktrace")
+        }
+
     }
 
     override fun requestNativeAd(
@@ -309,9 +431,11 @@ class all_ads : Adapter(),
          */
         try {
             adParam.setTagForChildProtection(bannerAdRequest.taggedForChildDirectedTreatment())
-            Log.d(TAG,"TagforChildLog:" + bannerAdRequest.taggedForChildDirectedTreatment().toString())
-        }
-        catch (exception:Throwable){
+            Log.d(
+                TAG,
+                "TagforChildLog:" + bannerAdRequest.taggedForChildDirectedTreatment().toString()
+            )
+        } catch (exception: Throwable) {
             val stacktrace =
                 StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
             Log.e(TAG, "configureAdRequest: TagForChildProtection couldn't read: $stacktrace")
@@ -349,39 +473,19 @@ class all_ads : Adapter(),
         mInitializationCompleteCallback = initializationCompleteCallback
 
         mInitializationCompleteCallback?.onInitializationSucceeded()
-
     }
 
-
     override fun getVersionInfo(): VersionInfo {
-        //TODO Update version info for each release
-        return VersionInfo(1, 2, 13)
+        val versionInfo = BuildConfig.VERSION_NAME
+        Log.d(TAG, "CustomAdapter - getVersionInfo() - $versionInfo")
+        val versionInfoArray = versionInfo.split(".").map { it.toInt() }.toTypedArray()
+        return VersionInfo(versionInfoArray[0],versionInfoArray[1],versionInfoArray[2])
     }
 
     override fun getSDKVersionInfo(): VersionInfo {
-        //TODO Update version info for each release
-        return VersionInfo(3, 4, 54)
-    }
-
-    override fun loadRewardedAd(
-        mediationRewardedAdConfiguration: MediationRewardedAdConfiguration?,
-        mediationAdLoadCallback: MediationAdLoadCallback<MediationRewardedAd, MediationRewardedAdCallback>?
-    ) {
-        try {
-            Log.d(TAG, "Enter loadRewardedAd")
-            val adUnit: String? = mediationRewardedAdConfiguration?.serverParameters?.getString(
-                MediationRewardedVideoAdAdapter.CUSTOM_EVENT_SERVER_PARAMETER_FIELD
-            )
-            val forwarder = HuaweiCustomEventRewardedAdEventForwarder(
-                mediationRewardedAdConfiguration!!,
-                mediationAdLoadCallback!!
-            )
-            forwarder.load(adUnit)
-        } catch (exception: Throwable) {
-            val stacktrace =
-                StringWriter().also { exception.printStackTrace(PrintWriter(it)) }.toString().trim()
-            Log.e(TAG, "Request Rewarded Ad Failed: $stacktrace")
-        }
-
+        val sdkVersionInfo = HwAds.getSDKVersion()
+        Log.d(TAG, "CustomAdapter - getSDKVersionInfo() - $sdkVersionInfo")
+        val sdkVersionInfoArray = sdkVersionInfo.split(".").map { it.toInt() }.toTypedArray()
+        return VersionInfo(sdkVersionInfoArray[0],sdkVersionInfoArray[1],sdkVersionInfoArray[2])
     }
 }
