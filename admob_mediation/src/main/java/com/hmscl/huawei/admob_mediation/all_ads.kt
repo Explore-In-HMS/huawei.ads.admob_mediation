@@ -43,6 +43,7 @@ import com.huawei.hms.ads.nativead.NativeAdConfiguration
 import com.huawei.hms.ads.nativead.NativeAdLoader
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.util.*
 
 
 class all_ads : Adapter(),
@@ -91,7 +92,7 @@ class all_ads : Adapter(),
                 Log.e(TAG, "Banner serverParameter is empty or null")
 
             }
-            if (serverParameters != null) {
+            else {
                 huaweiBannerAdId = serverParameters
                 Log.d(TAG, "Banner serverParameter $serverParameters")
             }
@@ -472,19 +473,19 @@ class all_ads : Adapter(),
         mInitializationCompleteCallback = initializationCompleteCallback
 
         mInitializationCompleteCallback?.onInitializationSucceeded()
-
     }
 
-
     override fun getVersionInfo(): VersionInfo {
-        //TODO Update version info for each release
-        return VersionInfo(1, 2, 15)
+        val versionInfo = BuildConfig.VERSION_NAME
+        Log.d(TAG, "CustomAdapter - getVersionInfo() - $versionInfo")
+        val versionInfoArray = versionInfo.split(".").map { it.toInt() }.toTypedArray()
+        return VersionInfo(versionInfoArray[0],versionInfoArray[1],versionInfoArray[2])
     }
 
     override fun getSDKVersionInfo(): VersionInfo {
-        //TODO Update version info for each release
-        return VersionInfo(3, 4, 54)
+        val sdkVersionInfo = HwAds.getSDKVersion()
+        Log.d(TAG, "CustomAdapter - getSDKVersionInfo() - $sdkVersionInfo")
+        val sdkVersionInfoArray = sdkVersionInfo.split(".").map { it.toInt() }.toTypedArray()
+        return VersionInfo(sdkVersionInfoArray[0],sdkVersionInfoArray[1],sdkVersionInfoArray[2])
     }
-
-
 }
