@@ -1,6 +1,7 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h1>
 
-![Latest Version](https://img.shields.io/badge/latestVersion-1.2.14-yellow) ![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.2-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.15-yellow) <br>![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
 
@@ -82,7 +83,7 @@ allprojects {
 ```
 
 <h1 id="app-level"></h1>
-In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the plugin.
+In the app-level build.gradle, include Huawei Ads and Google AdMob SDK dependencies (required by the adapter) and the adapter, Google Consent SDK is optional.
 
 ```groovy
 dependencies {
@@ -90,15 +91,13 @@ dependencies {
     implementation 'com.huawei.hms:ads-prime:<latest_version>'
     //Google AdMob SDK
     implementation 'com.google.android.gms:play-services-ads:<latest_version>'
-    //Adapter SDK
-    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version>'
     //Google Consent SDK. Include this SDK if you receive a ConsentInfo error upon receiving a Huawei Ads. This is necessary with the recent Google AdMob SDK updates.
     implementation "com.google.android.ads.consent:consent-library:<latest_version>"
 }
 ```
 
 > **_NOTE:_**  If your app can run only on Huawei mobile phones, you can integrate the Huawei Ads Lite SDK instead of Huawei Ads SDK (Optional)
-
+    
 ```groovy
 dependencies {
     //Huawei Ads Lite
@@ -107,11 +106,25 @@ dependencies {
 }
 ```
 
+```groovy
+dependencies {
+    ...
+    //If your app uses Google Admob SDK 20.6.0 and above versions, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_above_20.6.0>'
+    ...
+
+    //If your app uses Google Admob SDK 20.5.0 and below version, use :
+    implementation 'com.github.Explore-In-HMS:huawei.ads.admob_mediation:<latest_version_for_below_20.5.0>'
+}
+```
+
 <h3>Latest version of SDKs</h3>
 <ul>
   <li><a href="https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/publisher-service-version-change-history-0000001050066909">Check the Huawei Ads SDKs here</a></li>
   <li><a href="https://developers.google.com/admob/android/rel-notes">Check the Google AdMob SDK here</a></li>
-  <li><a href="#version-change-history">Check the version of adapter here</a></li>
+  <li><a href="https://github.com/googleads/googleads-consent-sdk-android">Check the latest Google Consent SDK here</a></li>
+  <li><a href="https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/dev#version-change-history">Check the latest version of adapter for Admob SDK 20.6.0 or above</a></li>
+  <li><a href="https://github.com/Explore-In-HMS/huawei.ads.admob_mediation/tree/develop/under-20#version-change-history">Check the latest version of adapter for Admob SDK 20.5.0 or below</a></li>
   <li><a href="https://github.com/googleads/googleads-consent-sdk-android">Check the Google Consent SDK here</a></li>
 </ul>
 
@@ -185,10 +198,18 @@ usesCleartextTraffic = "true"
 
 # Version Change History
 
+## 1.2.15
+
+<ul>
+  <li>*Resolve Unity ovesized banner issue</li>
+  <li>*Optimize mediation algorithm</li>
+  <li>*Optimize logging</li>
+</ul>
+
 ## 1.2.14
 
 <ul>
-  <li>New banner ad size supports are added </li>
+  <li>*New banner ad size supports are added </li>
   <li>*Smart Banner</li>
   <li>*Adaptive Banner</li>
 </ul>
