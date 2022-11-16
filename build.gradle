@@ -25,26 +25,13 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        //classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
 
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
-/*plugins {
-    id "org.sonarqube" version "3.0"
-}
-sonarqube {
-    properties {
-        property "sonar.projectKey","com.hmscl.huawei.mediationjitpack"
-        property "sonar.projectName","com.hmscl.huawei.mediationjitpack"
-        property "sonar.host.url","http://10.216.72.212:9000"
-        property "sonar.login","d724a2891b797f26a36b4c42cad0f2546eda1f89"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.projectVersion", version()
-    }
-}*/
 
 allprojects {
     repositories {
