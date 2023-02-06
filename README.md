@@ -1,7 +1,7 @@
  <h1 align="center">Huawei-Admob Mediation Github Documentation</h1>
 
 
- ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.2-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.15-yellow) <br>![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
+ ![latest_version_for_above_20.6.0](https://img.shields.io/badge/latest_version_for_above_20.6.0-2.0.2-yellow)  ![latest_version_for_below_20.5.0](https://img.shields.io/badge/latest_version_for_below_20.5.0-1.2.16-yellow) <br>![Kotlin](https://img.shields.io/badge/language-kotlin-blue)
 <br>
 ![Supported Platforms](https://img.shields.io/badge/Supported_Platforms:-Native_Android_,_Unity_,_React_Native_,_Flutter_,_Cordova-orange)
 
@@ -198,10 +198,16 @@ usesCleartextTraffic = "true"
 
 # Version Change History
 
+## 1.2.16
+
+<ul>
+  <li>*Remove deprecated keyword function</li>
+</ul>
+
 ## 1.2.15
 
 <ul>
-  <li>*Resolve Unity ovesized banner issue</li>
+  <li>*Resolve Unity oversized banner issue</li>
   <li>*Optimize mediation algorithm</li>
   <li>*Optimize logging</li>
 </ul>
