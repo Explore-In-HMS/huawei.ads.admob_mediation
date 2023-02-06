@@ -385,10 +385,6 @@ class all_ads : Adapter(),
 
     private fun configureAdRequest(bannerAdRequest: MediationAdRequest): AdParam {
         val adParam = AdParam.Builder()
-        bannerAdRequest.keywords?.forEach { keyword ->
-            adParam.addKeyword(keyword)
-            Log.d(TAG, "MediationKeywordsLog:" + keyword.toString())
-        }
 
         /**
          * NPA-PA
